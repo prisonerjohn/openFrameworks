@@ -13,7 +13,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\..\libs\fmodex\lib\vs64;..\..\..\libs\freeglut\lib\vs64;..\..\..\libs\FreeImage\lib\vs64;..\..\..\libs\freetype\lib\vs64;..\..\..\libs\glew\lib\vs64;..\..\..\libs\glu\lib\vs64;..\..\..\libs\glfw\lib\vs64;..\..\..\libs\openssl\lib\vs64;..\..\..\libs\Poco\lib\vs64;..\..\..\libs\rtAudio\lib\vs64;..\..\..\libs\tess2\lib\vs64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>msimg32.lib;OpenGL32.lib;GLu32.lib;kernel32.lib;setupapi.lib;Vfw32.lib;comctl32.lib;freeglut.lib;glfw3.lib;rtAudio.lib;freetype.lib;FreeImage.lib;dsound.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;glew32s.lib;fmodexL64_vc.lib;glu32.lib;crypt32.lib;libeay32MD.lib;ssleay32MD.lib;PocoFoundationmd.lib;PocoNetmd.lib;PocoUtilmd.lib;PocoXMLmd.lib;Ws2_32.lib;tess2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>strmiids.lib;strmbase.lib;msimg32.lib;OpenGL32.lib;GLu32.lib;kernel32.lib;setupapi.lib;Vfw32.lib;comctl32.lib;freeglut.lib;glfw3.lib;rtAudio.lib;freetype.lib;FreeImage.lib;dsound.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;glew32s.lib;fmodexL64_vc.lib;glu32.lib;crypt32.lib;libeay32MD.lib;ssleay32MD.lib;PocoFoundationmd.lib;PocoNetmd.lib;PocoUtilmd.lib;PocoXMLmd.lib;Ws2_32.lib;tess2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>PocoFoundationd.lib;atlthunk.lib;LIBC.lib;LIBCMT</IgnoreSpecificDefaultLibraries>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
