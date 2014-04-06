@@ -217,7 +217,8 @@ public:
 	 *          "Efficiently Building a Matrix to Rotate One Vector to Another"
 	 *          Journal of Graphics Tools, 4(4):1-4, 1999
 	 */
-	static aiMatrix4x4& FromToMatrix(const aiVector3D& from, const aiVector3D& to, aiMatrix4x4& out);
+	static aiMatrix4x4& FromToMatrix(const aiVector3D& from, 
+		const aiVector3D& to, aiMatrix4x4& out);
 
 #endif // __cplusplus
 
