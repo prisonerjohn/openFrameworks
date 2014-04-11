@@ -64,7 +64,7 @@ void ofxOscSender::shutdown()
 
 void ofxOscSender::sendBundle( ofxOscBundle& bundle )
 {
-	static const int OUTPUT_BUFFER_SIZE = 32768;
+	static const size_t OUTPUT_BUFFER_SIZE = 32768;
 	char buffer[OUTPUT_BUFFER_SIZE];
 	osc::OutboundPacketStream p(buffer, OUTPUT_BUFFER_SIZE );
 
@@ -76,7 +76,7 @@ void ofxOscSender::sendBundle( ofxOscBundle& bundle )
 
 void ofxOscSender::sendMessage( ofxOscMessage& message )
 {
-	static const int OUTPUT_BUFFER_SIZE = 16384;
+	static const size_t OUTPUT_BUFFER_SIZE = 16384;
 	char buffer[OUTPUT_BUFFER_SIZE];
     osc::OutboundPacketStream p( buffer, OUTPUT_BUFFER_SIZE );
 
