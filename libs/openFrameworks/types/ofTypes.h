@@ -186,7 +186,7 @@ public:
 #if (_MSC_VER)
 	template<typename Tp1>
 	ofPtr(const ofPtr<Tp1>& __r, std::_Dynamic_tag)
-	: std::shared_ptr<T>(__r, std:::_Dynamic_tag()) { }
+	: std :: shared_ptr<T>(__r, std::_Dynamic_tag()) { }
 #else
 	template<typename Tp1>
 	ofPtr(const ofPtr<Tp1>& __r, std::__dynamic_cast_tag)
