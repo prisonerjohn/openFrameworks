@@ -86,3 +86,5 @@ Desktop.ini
 # Miscellaneous
 .mailmap
 
+*.lib
+*.bsc
