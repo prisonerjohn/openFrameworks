@@ -1,5 +1,79 @@
+OF 0.8.2
+========
+ 
+#### change key  
+	  + added  
+	  - removed  
+	  / modified  
+
+### Graphics
+	+ ofGetCurrentOrientationMatrix(): query current orientation matrix state (supported by ofGLProgrammableRenderer, ofGLRenderer)
+
+------------------------------------------------------------------------------
+
+CORE
+----
+### 3d
+	/ fix of3DPrimitive copy constructor not copying node
+	
+### app
+	+ ofAppEGLWindow added new methods hasMouse()/hasKeyboard() to provide info on whether mouse/keyboard were detected
+	+ ofAppEGLWindow has new method setThreadTimeout allowing adjustable wait time for the thread to join
+	/ ofAppGLFWWindow: fix key mappings on non english keyboards
+### events
+	+ fix ofSetFrameRate to be more accurate
+	+ add keycode, scancode and unicode codepoint to ofKeyEventArgs
+### gl
+	+ ofFbo: added new method to attach an external texture
+	+ ofFbo: fix regression on min/max filter settings
+### Graphics
+	/ ofImage: convert format when loading different image types
+	/ Fix ofSetupPerspective not using passed width and height
+### Math
+	/ fix ofQuaternion setOrientation and getEulerOrientation
+### Utils
+	/ ofThread now uses Class name for logging channel (was thread name)
+	/ ofURLFileLoader: better shutdown, don't shutdown if it wasn't initialized + wait thread
+	/ ofXml: fixes crash on empty document
+	
+PLATFORM SPECIFIC
+-----------------
+### Android
+	/ fix package generation, was missing paths.make
+	/ fix 32 bits ndk path
+	/ update project files to latest SDK/ADT (20140321)
+	/ fixed shader in shader example
+	/ disable x86 in assimp and opencv examples
+	/ shader and assimp examples reload gl resources when the app resumes
+### iOS
+    + implement setSpeed() for video player
+### Linux
+	/ video: fixes for videos which pixels have padding
+	/ video: close pipeline properly by sending and waiting for EOS event
+	/ system: fix dialog boxes
+	/ install & make: detect and use gtk 3 instead of 2 if it's available
+###OSX
+	/ Reduce warnings on OSX
+
+ORE ADDONS
+-----------
+### ofxAssimpModelLoader
+	/ fix to be able to put loaders on vectors
+### ofxGui
+	+ ofxSlider: added get/setMin/Max
+
+### ofxNetwork
+	/ fix port reuse on osx
+
 OF 0.8.1
 ========
+ 
+#### change key  
+	  + added  
+	  - removed  
+	  / modified  
+
+------------------------------------------------------------------------------
 
 ```
 _____/\\\\\\\______________/\\\\\\\\\_______________/\\\_        

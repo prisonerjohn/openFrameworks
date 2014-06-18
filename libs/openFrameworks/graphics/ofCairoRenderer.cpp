@@ -864,8 +864,8 @@ void ofCairoRenderer::viewport(ofRectangle v){
 }
 
 void ofCairoRenderer::viewport(float x, float y, float width, float height, bool invertY){
-	if(width == 0) width = ofGetWindowWidth();
-	if(height == 0) height = ofGetWindowHeight();
+	if(width < 0) width = ofGetWindowWidth();
+	if(height < 0) height = ofGetWindowHeight();
 
 	if (invertY){
 		y = -y;
@@ -885,8 +885,8 @@ void ofCairoRenderer::viewport(float x, float y, float width, float height, bool
 
 void ofCairoRenderer::setupScreenPerspective(float width, float height, float fov, float nearDist, float farDist){
 	if(!b3D) return;
-	if(width == 0) width = ofGetWidth();
-	if(height == 0) height = ofGetHeight();
+	if(width < 0) width = ofGetWidth();
+	if(height < 0) height = ofGetHeight();
 	ofOrientation orientation = ofGetOrientation();
 
 	float viewW = viewportRect.width;
@@ -953,8 +953,8 @@ void ofCairoRenderer::setupScreenPerspective(float width, float height, float fo
 
 void ofCairoRenderer::setupScreenOrtho(float width, float height, float nearDist, float farDist){
 	if(!b3D) return;
-	if(width == 0) width = ofGetWidth();
-	if(height == 0) height = ofGetHeight();
+	if(width < 0) width = ofGetWidth();
+	if(height < 0) height = ofGetHeight();
 	ofOrientation orientation = ofGetOrientation();
 
 	float viewW = viewportRect.width;

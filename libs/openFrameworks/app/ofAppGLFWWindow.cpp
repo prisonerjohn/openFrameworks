@@ -239,7 +239,6 @@ void ofAppGLFWWindow::setupOpenGL(int w, int h, int screenMode){
 
 //--------------------------------------------
 void ofAppGLFWWindow::exit_cb(GLFWwindow* windowP_){
-	OF_EXIT_APP(0);
 }
 
 //--------------------------------------------
@@ -294,10 +293,16 @@ void ofAppGLFWWindow::runAppViaInfiniteLoop(ofBaseApp * appPtr){
 	glfwMakeContextCurrent(windowP);
 
 	ofNotifySetup();
-	while(true){
+	while(!glfwWindowShouldClose(windowP)){
 		ofNotifyUpdate();
 		display();
 	}
+    glfwDestroyWindow(windowP);
+    glfwTerminate();
+}
+
+void ofAppGLFWWindow::windowShouldClose(){
+	glfwSetWindowShouldClose(windowP,1);
 }
 
 //------------------------------------------------------------
@@ -490,6 +495,11 @@ int ofAppGLFWWindow::getHeight()
 			return windowW * pixelScreenCoordScale;
 		}
 	}
+}
+
+//------------------------------------------------------------
+GLFWwindow* ofAppGLFWWindow::getGLFWWindow(){
+    return windowP;
 }
 
 //------------------------------------------------------------
@@ -740,24 +750,31 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen){
         int ypos = 0;
  
         if( bMultiWindowFullscreen ){
- 
-            float totalWidth = 0.0;
-            float maxHeight  = 0.0;
-            int monitorCount;
-            GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
- 
-            //lets find the total width of all the monitors
-            //and we'll make the window height the height of the largest monitor.
-            for(int i = 0; i < monitorCount; i++){
-                const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[i]);
-                totalWidth += desktopMode->width;
-                if( i == 0 || desktopMode->height > maxHeight ){
-                    maxHeight = desktopMode->height;
-                }
-            }
- 
-            fullscreenW = totalWidth;
-            fullscreenH = maxHeight;
+
+			int minX = 0;
+			int maxX = 0;
+			int minY = 0;
+			int maxY = 0;
+			int monitorCount;
+			GLFWmonitor** monitors = glfwGetMonitors(&monitorCount);
+			int tempXPos = 0;
+			int tempYPos = 0;
+			//lets find the total width of all the monitors
+			//and we'll make the window height the height of the largest monitor.
+			for(int i = 0; i < monitorCount; i++){
+				const GLFWvidmode * desktopMode = glfwGetVideoMode(monitors[i]);
+				glfwGetMonitorPos(monitors[i], &tempXPos, &tempYPos);
+				minX = min(tempXPos,minX);
+				minY = min(tempYPos,minY);
+				maxX = max(maxX,tempXPos + desktopMode->width);
+				maxY = max(maxY,tempYPos + desktopMode->height);
+
+				xpos = min(xpos,tempXPos);
+				ypos = min(ypos,tempYPos);
+			}
+
+			fullscreenW = maxX-minX;
+			fullscreenH = maxY-minY;
         }else{
  
             int monitorCount;
@@ -774,7 +791,7 @@ void ofAppGLFWWindow::setFullscreen(bool fullscreen){
 		HWND hwnd = glfwGetWin32Window(windowP);
  
   		DWORD EX_STYLE = WS_EX_OVERLAPPEDWINDOW;
-		DWORD STYLE = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
+		DWORD STYLE = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_SIZEBOX;
  
 	  	ChangeDisplaySettings(0, 0);
 		SetWindowLong(hwnd, GWL_EXSTYLE, EX_STYLE);
@@ -815,8 +832,7 @@ ofOrientation ofAppGLFWWindow::getOrientation(){
 void ofAppGLFWWindow::exitApp(){
 	// Terminate GLFW
 	glfwTerminate();
-
-	OF_EXIT_APP(0);
+	std::exit(0);
 }
 
 //------------------------------------------------------------
@@ -871,10 +887,10 @@ void ofAppGLFWWindow::mouse_cb(GLFWwindow* windowP_, int button, int state, int 
 	}
 
 	if (state == GLFW_PRESS) {
-		ofNotifyMousePressed(ofGetMouseX()*instance->pixelScreenCoordScale, ofGetMouseY()*instance->pixelScreenCoordScale, button);
+		ofNotifyMousePressed(ofGetMouseX(), ofGetMouseY(), button);
 		instance->buttonPressed=true;
 	} else if (state == GLFW_RELEASE) {
-		ofNotifyMouseReleased(ofGetMouseX()*instance->pixelScreenCoordScale, ofGetMouseY()*instance->pixelScreenCoordScale, button);
+		ofNotifyMouseReleased(ofGetMouseX(), ofGetMouseY(), button);
 		instance->buttonPressed=false;
 	}
 	instance->buttonInUse = button;
@@ -899,14 +915,13 @@ void ofAppGLFWWindow::scroll_cb(GLFWwindow* windowP_, double x, double y) {
 }
 
 //------------------------------------------------------------
-void ofAppGLFWWindow::drop_cb(GLFWwindow* windowP_, const char* dropString) {
-	string drop = dropString;
+void ofAppGLFWWindow::drop_cb(GLFWwindow* windowP_, int numFiles, const char** dropString) {
 	ofDragInfo drag;
-	drag.position.set(ofGetMouseX()*instance->pixelScreenCoordScale, ofGetMouseY()*instance->pixelScreenCoordScale);
-	drag.files = ofSplitString(drop,"\n",true);
+	drag.position.set(ofGetMouseX(), ofGetMouseY());
+	drag.files.resize(numFiles);
 #ifdef TARGET_LINUX
 	for(int i=0; i<(int)drag.files.size(); i++){
-		drag.files[i] = Poco::URI(drag.files[i]).getPath();
+		drag.files[i] = Poco::URI(dropString[i]).getPath();
 	}
 #endif
 	ofNotifyDragEvent(drag);
@@ -918,8 +933,9 @@ void ofAppGLFWWindow::error_cb(int errorCode, const char* errorDescription){
 }
 
 //------------------------------------------------------------
-void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int key, int scancode, int action, int mods) {
-	switch (key) {
+void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int keycode, int scancode, unsigned int codepoint, int action, int mods) {
+	int key;
+	switch (keycode) {
 		case GLFW_KEY_ESCAPE:
 			key = OF_KEY_ESC;
 			break;
@@ -1026,19 +1042,14 @@ void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int key, int scancode, i
 			key = OF_KEY_TAB;
 			break;   
 		default:
+			key = codepoint;
 			break;
 	}
 
-	//GLFW defaults to uppercase - OF users are used to lowercase
-    //we look and see if shift is being held to toggle upper/lowecase 
-	if( key >= 65 && key <= 90 && !ofGetKeyPressed(OF_KEY_SHIFT) ){
-		key += 32;
-	}
-
 	if(action == GLFW_PRESS || action == GLFW_REPEAT){
-		ofNotifyKeyPressed(key);
+		ofNotifyKeyPressed(key,keycode,scancode,codepoint);
 	}else if (action == GLFW_RELEASE){
-		ofNotifyKeyReleased(key);
+		ofNotifyKeyReleased(key,keycode,scancode,codepoint);
 	}
 }
 
