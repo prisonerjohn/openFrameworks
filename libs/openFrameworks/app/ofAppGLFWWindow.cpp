@@ -65,6 +65,8 @@ ofAppGLFWWindow::ofAppGLFWWindow():ofAppBaseWindow(){
 	windowW				= 0;
 	windowH				= 0;
 	bDoubleBuffered		= true;
+	
+	bCursorAboveWindow	= false;
 
 	ofAppPtr			= NULL;
 	instance			= this;
@@ -87,6 +89,11 @@ void ofAppGLFWWindow::setNumSamples(int _samples){
 //------------------------------------------------------------
 void ofAppGLFWWindow::setMultiDisplayFullscreen(bool bMultiFullscreen){
     bMultiWindowFullscreen = bMultiFullscreen; 
+}
+
+//------------------------------------------------------------
+bool ofAppGLFWWindow::isCursorAboveWindow(){
+	return bCursorAboveWindow;
 }
 
 //------------------------------------------------------------
@@ -245,6 +252,8 @@ void ofAppGLFWWindow::initializeWindow(){
 	glfwSetScrollCallback(windowP, scroll_cb);
 	glfwSetDropCallback(windowP, drop_cb);
 
+	//JG added
+	glfwSetCursorEnterCallback(windowP, enter_cb);
 }
 
 #ifdef TARGET_LINUX
@@ -880,6 +889,12 @@ void ofAppGLFWWindow::motion_cb(GLFWwindow* windowP_, double x, double y) {
 //------------------------------------------------------------
 void ofAppGLFWWindow::scroll_cb(GLFWwindow* windowP_, double x, double y) {
 	// ofSendMessage("scroll|"+ofToString(x,5) + "|" + ofToString(y,5));
+}
+
+//------------------------------------------------------------
+void ofAppGLFWWindow::enter_cb(GLFWwindow* windowP_, int entered) {
+//	cout << "CURSOR " << (entered ? "ENTERED" : "EXITED" ) << endl;
+	instance->bCursorAboveWindow = (entered == 1);
 }
 
 //------------------------------------------------------------
