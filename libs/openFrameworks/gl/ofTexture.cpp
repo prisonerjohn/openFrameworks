@@ -551,7 +551,7 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 			glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 		}
 #ifndef TARGET_OPENGLES		
-		glTexParameteri(texData.textureTarget, GL_GENERATE_MIPMAP_SGIS, true);
+		//glTexParameteri(texData.textureTarget, GL_GENERATE_MIPMAP_SGIS, true);
 #endif
 		glTexParameteri( texData.textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri( texData.textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -561,6 +561,9 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 		
 		
 #ifndef TARGET_OPENGLES		
+		glTexParameteri(texData.textureTarget, GL_GENERATE_MIPMAP, GL_TRUE);
+        glTexSubImage2D(texData.textureTarget, 0, 0, 0, w, h, glFormat, glType, data);
+		/*
 		//using sRGB compression
 		if (texData.compressionType == OF_COMPRESS_SRGB)
 		{
@@ -592,6 +595,7 @@ void ofTexture::loadData(const void * data, int w, int h, int glFormat, int glTy
 			else if(texData.glTypeInternal == GL_LUMINANCE)
 				gluBuild2DMipmaps(texData.textureTarget, GL_COMPRESSED_LUMINANCE_ARB, w, h, glFormat, glType, data);
 		}
+		*/
 #endif
 		
 
