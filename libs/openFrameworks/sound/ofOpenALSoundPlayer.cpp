@@ -19,7 +19,10 @@ vector<float> ofOpenALSoundPlayer::systemWindowedSignal;
 vector<float> ofOpenALSoundPlayer::systemBins;
 vector<kiss_fft_cpx> ofOpenALSoundPlayer::systemCx_out;
 
-static set<ofOpenALSoundPlayer*> players;
+static set<ofOpenALSoundPlayer*> & players(){
+	static set<ofOpenALSoundPlayer*> * players = new set<ofOpenALSoundPlayer*>;
+	return *players;
+}
 
 void ofOpenALSoundUpdate(){
 	alcProcessContext(ofOpenALSoundPlayer::alContext);
@@ -116,14 +119,14 @@ ofOpenALSoundPlayer::ofOpenALSoundPlayer(){
 #ifdef OF_USING_MPG123
 	mp3streamf		= 0;
 #endif
-	players.insert(this);
+	players().insert(this);
 }
 
 // ----------------------------------------------------------------------------
 ofOpenALSoundPlayer::~ofOpenALSoundPlayer(){
 	unloadSound();
 	kiss_fftr_free(fftCfg);
-	players.erase(this);
+	players().erase(this);
 }
 
 //---------------------------------------
@@ -625,9 +628,25 @@ void ofOpenALSoundPlayer::update(ofEventArgs & args){
 //------------------------------------------------------------
 void ofOpenALSoundPlayer::unloadSound(){
 	ofRemoveListener(ofEvents().update,this,&ofOpenALSoundPlayer::update);
-	alDeleteBuffers(buffers.size(),&buffers[0]);
+	
+	// Delete sources before buffers.
 	alDeleteSources(sources.size(),&sources[0]);
+	alDeleteBuffers(buffers.size(),&buffers[0]);
+
+	// Free resources and close file descriptors.
+#ifdef OF_USING_MPG123
+	if(mp3streamf){
+		mpg123_close(mp3streamf);
+		mpg123_delete(mp3streamf);
+	}
+	mp3streamf = 0;
+#endif
+
+	if(streamf){
+		sf_close(streamf);
+	}
 	streamf = 0;
+	
 	bLoadedOk = false;
 }
 
@@ -966,7 +985,7 @@ float * ofOpenALSoundPlayer::getSpectrum(int bands){
 float * ofOpenALSoundPlayer::getSystemSpectrum(int bands){
 	initSystemFFT(bands);
 	systemBins.assign(systemBins.size(),0);
-	if(players.empty()) return &systemBins[0];
+	if(players().empty()) return &systemBins[0];
 
 	int signalSize = (bands-1)*2;
 	if(int(systemWindowedSignal.size())!=signalSize){
@@ -975,7 +994,7 @@ float * ofOpenALSoundPlayer::getSystemSpectrum(int bands){
 	systemWindowedSignal.assign(systemWindowedSignal.size(),0);
 
 	set<ofOpenALSoundPlayer*>::iterator it;
-	for(it=players.begin();it!=players.end();it++){
+	for(it=players().begin();it!=players().end();it++){
 		if(!(*it)->getIsPlaying()) continue;
 		float * buffer = (*it)->getCurrentBufferSum(signalSize);
 		for(int i=0;i<signalSize;i++){
