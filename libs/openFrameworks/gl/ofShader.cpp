@@ -3,7 +3,10 @@
 #include "ofFileUtils.h"
 #include "ofGraphics.h"
 #include "ofGLProgrammableRenderer.h"
-#include <map>
+#include "Poco/RegularExpression.h"
+#include "ofTexture.h"
+#include "ofMatrix4x4.h"
+#include "ofMatrix3x3.h"
 
 static const string COLOR_ATTRIBUTE="color";
 static const string POSITION_ATTRIBUTE="position";
@@ -344,15 +347,15 @@ void ofShader::checkShaderInfoLog(GLuint shader, GLenum type, ofLogLevel logLeve
 			string infoString = (infoBuffer != NULL) ? string(infoBuffer): "";
 			re.match(infoString, 0, matches);
 			ofBuffer buf = shaderSource[type];
-			buf.resetLineReader();
+			ofBuffer::Line line = buf.getLines().begin();
 			if (!matches.empty()){
 			int  offendingLineNumber = ofToInt(infoString.substr(matches[1].offset, matches[1].length));
 				ostringstream msg;
 				msg << "ofShader: " + nameForType(type) + ", offending line " << offendingLineNumber << " :"<< endl;
-				for(int i=0; !buf.isLastLine(); i++ ){
-					string s = buf.getNextLine();
+				for(int i=0; line != buf.getLines().end(); line++, i++ ){
+					string s = *line;
 					if ( i >= offendingLineNumber -3 && i < offendingLineNumber + 2 ){
-						msg << "\t" << setw(5) << (i+1) << s << endl;
+						msg << "\t" << setw(5) << (i+1) << "\t" << s << endl;
 					}
 				}
 				ofLog(logLevel) << msg.str();
@@ -654,6 +657,14 @@ void ofShader::setUniform4fv(const string & name, const float* v, int count) {
 	if(bLoaded) {
 		int loc = getUniformLocation(name);
 		if (loc != -1) glUniform4fv(loc, count, v);
+	}
+}
+	
+//--------------------------------------------------------------
+void ofShader::setUniformMatrix3f(const string & name, const ofMatrix3x3 & m) {
+	if(bLoaded) {
+		int loc = getUniformLocation(name);
+		if (loc != -1) glUniformMatrix3fv(loc, 1, GL_FALSE, &m.a);
 	}
 }
 
