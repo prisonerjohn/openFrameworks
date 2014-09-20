@@ -3,7 +3,7 @@
 //  AVFoundationTest
 //
 //  Created by Sam Kronick on 5/31/13.
-//
+//  Modified by James George and Elie Zananiri.
 //
 
 #pragma once
@@ -14,7 +14,8 @@
 #import "ofAVFMovieRenderer.h"
 #endif
 
-class ofAVFoundationPlayer  : public ofBaseVideoPlayer {
+class ofAVFoundationPlayer  : public ofBaseVideoPlayer
+{
     
 public:
     
@@ -23,7 +24,6 @@ public:
     
     bool                loadMovie(string path);
     
-    void                closeMovie();
     void                close();
     
     void                idleMovie();
@@ -31,44 +31,36 @@ public:
     void                play();
     void                stop();
     
-    float               getAmplitude(int channel = 0);
-    float               getAmplitudeAt(float pos, int channel = 0);
-    float *             getAllAmplitudes();
-    int                 getNumAmplitudes();
-	
-    bool                isFrameNew(); //returns true if the frame has changed in this update cycle
+    bool                isFrameNew() const; //returns true if the frame has changed in this update cycle
     
     // Returns openFrameworks compatible RGBA pixels.
     // Be aware of your current render mode.
     unsigned char *     getPixels();
-    ofPixelsRef         getPixelsRef();
+    const ofPixels &    getPixelsRef() const;
+    ofPixels &          getPixelsRef();
     
-    // Returns openFrameworks compatible ofTexture pointer.
-    // if decodeMode == OF_QTKIT_DECODE_PIXELS_ONLY,
-    // the returned pointer will be NULL.
     ofTexture *         getTexture();
-    ofTexture&          getTextureReference();
+    ofTexture &         getTextureReference();
     
-    bool                isLoading();
-    bool                isLoaded();
-    bool                isAudioLoaded();
+    bool                isLoading() const;
+    bool                isLoaded() const;
     
-    bool                isPlaying();
-    bool                getIsMovieDone();
+    bool                isPlaying() const;
+    bool                getIsMovieDone() const;
     
-    float               getPosition();
-    float               getCurrentTime();
-    float               getPositionInSeconds();
-    int                 getCurrentFrame();
-    float               getDuration();
-    int                 getTotalNumFrames();
-    bool                isPaused();
-    float               getSpeed();
-    ofLoopType          getLoopState();
-    float               getVolume();
+    float               getPosition() const;
+    float               getCurrentTime() const;
+    float               getPositionInSeconds() const;
+    int                 getCurrentFrame() const;
+    float               getDuration() const;
+    int                 getTotalNumFrames() const;
+    bool                isPaused() const;
+    float               getSpeed() const;
+    ofLoopType          getLoopState() const;
+    float               getVolume() const;
     
     void                setPosition(float pct);
-	void                setTime(float seconds);
+    void                setTime(float seconds);
     void                setPositionInSeconds(float seconds);
     void                setFrame(int frame); // frame 0 = first frame...
     void                setBalance(float balance);
@@ -79,13 +71,13 @@ public:
     
     // ofAVFoundationPlayer only supports OF_PIXELS_RGB and OF_PIXELS_RGBA.
     bool                setPixelFormat(ofPixelFormat pixelFormat);
-    ofPixelFormat       getPixelFormat();
+    ofPixelFormat       getPixelFormat() const;
     
     void                draw(float x, float y, float w, float h);
     void                draw(float x, float y);
     
-    float               getWidth();
-    float               getHeight();
+    float               getWidth() const;
+    float               getHeight() const;
     
     void                firstFrame();
     void                nextFrame();
@@ -94,13 +86,11 @@ public:
 protected:
     
     ofLoopType currentLoopState;
-    
-    //bool bTheFutureIsNow;
-    
+        
     bool bPaused;
-	bool bShouldPlay;
-	
-	float scrubToTime;
+    bool bShouldPlay;
+    
+    float scrubToTime;
     bool bNewFrame;
     bool bHavePixelsChanged;
     
@@ -114,7 +104,6 @@ protected:
     void updateTexture();
     void reallocatePixels();
     
-//    ofFbo fbo;
     ofTexture tex;
     ofPixels pixels;
     ofPixelFormat pixelFormat;
@@ -122,7 +111,7 @@ protected:
     // This #ifdef is so you can include this .h file in .cpp files
     // and avoid ugly casts in the .m file
 #ifdef __OBJC__
-    AVFMovieRenderer* moviePlayer;
+    AVFMovieRenderer * moviePlayer;
 #else
     void * moviePlayer;
 #endif

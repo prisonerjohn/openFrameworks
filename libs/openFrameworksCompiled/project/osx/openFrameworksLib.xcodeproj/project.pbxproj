@@ -24,10 +24,10 @@
 		2E6EA7081603AAD600B7ADF3 /* of3dPrimitives.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2E6EA7071603AAD600B7ADF3 /* of3dPrimitives.cpp */; };
 		53EEEF4B130766EF0027C199 /* ofMesh.h in Headers */ = {isa = PBXBuildFile; fileRef = 53EEEF49130766EF0027C199 /* ofMesh.h */; };
 		53EEEF4C130766EF0027C199 /* ofMesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 53EEEF4A130766EF0027C199 /* ofMesh.cpp */; };
-		6447BB531917D95500AA9CCF /* ofAVFMovieRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6447BB4F1917D95500AA9CCF /* ofAVFMovieRenderer.h */; };
-		6447BB541917D95500AA9CCF /* ofAVFMovieRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6447BB501917D95500AA9CCF /* ofAVFMovieRenderer.m */; };
-		6447BB551917D95500AA9CCF /* ofAVFoundationPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6447BB511917D95500AA9CCF /* ofAVFoundationPlayer.h */; };
-		6447BB561917D95500AA9CCF /* ofAVFoundationPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6447BB521917D95500AA9CCF /* ofAVFoundationPlayer.mm */; };
+		6433E9A819BCDB8900869EE5 /* ofAVFMovieRenderer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6433E9A419BCDB8900869EE5 /* ofAVFMovieRenderer.h */; };
+		6433E9A919BCDB8900869EE5 /* ofAVFMovieRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6433E9A519BCDB8900869EE5 /* ofAVFMovieRenderer.m */; };
+		6433E9AA19BCDB8900869EE5 /* ofAVFoundationPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 6433E9A619BCDB8900869EE5 /* ofAVFoundationPlayer.h */; };
+		6433E9AB19BCDB8900869EE5 /* ofAVFoundationPlayer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6433E9A719BCDB8900869EE5 /* ofAVFoundationPlayer.mm */; };
 		67D96B971651AF6D00D5242D /* ofGLUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 67D96B941651AF6D00D5242D /* ofGLUtils.cpp */; };
 		772BDF73146928600030F0EE /* ofOpenALSoundPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 772BDF71146928600030F0EE /* ofOpenALSoundPlayer.cpp */; };
 		772BDF74146928600030F0EE /* ofOpenALSoundPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 772BDF72146928600030F0EE /* ofOpenALSoundPlayer.h */; };
@@ -176,10 +176,10 @@
 		2E6EA7071603AAD600B7ADF3 /* of3dPrimitives.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = of3dPrimitives.cpp; sourceTree = "<group>"; };
 		53EEEF49130766EF0027C199 /* ofMesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofMesh.h; sourceTree = "<group>"; };
 		53EEEF4A130766EF0027C199 /* ofMesh.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofMesh.cpp; sourceTree = "<group>"; };
-		6447BB4F1917D95500AA9CCF /* ofAVFMovieRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofAVFMovieRenderer.h; sourceTree = "<group>"; };
-		6447BB501917D95500AA9CCF /* ofAVFMovieRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ofAVFMovieRenderer.m; sourceTree = "<group>"; };
-		6447BB511917D95500AA9CCF /* ofAVFoundationPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofAVFoundationPlayer.h; sourceTree = "<group>"; };
-		6447BB521917D95500AA9CCF /* ofAVFoundationPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofAVFoundationPlayer.mm; sourceTree = "<group>"; };
+		6433E9A419BCDB8900869EE5 /* ofAVFMovieRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofAVFMovieRenderer.h; sourceTree = "<group>"; };
+		6433E9A519BCDB8900869EE5 /* ofAVFMovieRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ofAVFMovieRenderer.m; sourceTree = "<group>"; };
+		6433E9A619BCDB8900869EE5 /* ofAVFoundationPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofAVFoundationPlayer.h; sourceTree = "<group>"; };
+		6433E9A719BCDB8900869EE5 /* ofAVFoundationPlayer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ofAVFoundationPlayer.mm; sourceTree = "<group>"; };
 		67D96B941651AF6D00D5242D /* ofGLUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ofGLUtils.cpp; path = gl/ofGLUtils.cpp; sourceTree = "<group>"; };
 		772BDF71146928600030F0EE /* ofOpenALSoundPlayer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ofOpenALSoundPlayer.cpp; sourceTree = "<group>"; };
 		772BDF72146928600030F0EE /* ofOpenALSoundPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofOpenALSoundPlayer.h; sourceTree = "<group>"; };
@@ -459,10 +459,6 @@
 		E4B27AD510CBE92A00536013 /* video */ = {
 			isa = PBXGroup;
 			children = (
-				6447BB4F1917D95500AA9CCF /* ofAVFMovieRenderer.h */,
-				6447BB501917D95500AA9CCF /* ofAVFMovieRenderer.m */,
-				6447BB511917D95500AA9CCF /* ofAVFoundationPlayer.h */,
-				6447BB521917D95500AA9CCF /* ofAVFoundationPlayer.mm */,
 				E4B27ADB10CBE92A00536013 /* ofVideoGrabber.cpp */,
 				E4B27ADC10CBE92A00536013 /* ofVideoGrabber.h */,
 				E4B27ADD10CBE92A00536013 /* ofVideoPlayer.cpp */,
@@ -479,10 +475,10 @@
 				E703368F15D4B03E009A3FDE /* ofQTKitPlayer.h */,
 				FDFC9EF01600D70500EDD797 /* ofQTKitMovieRenderer.h */,
 				FDFC9EF11600D70600EDD797 /* ofQTKitMovieRenderer.m */,
-				E4B27ADB10CBE92A00536013 /* ofVideoGrabber.cpp */,
-				E4B27ADC10CBE92A00536013 /* ofVideoGrabber.h */,
-				E4B27ADD10CBE92A00536013 /* ofVideoPlayer.cpp */,
-				E4B27ADE10CBE92A00536013 /* ofVideoPlayer.h */,
+				6433E9A419BCDB8900869EE5 /* ofAVFMovieRenderer.h */,
+				6433E9A519BCDB8900869EE5 /* ofAVFMovieRenderer.m */,
+				6433E9A619BCDB8900869EE5 /* ofAVFoundationPlayer.h */,
+				6433E9A719BCDB8900869EE5 /* ofAVFoundationPlayer.mm */,
 			);
 			name = video;
 			path = ../../../openFrameworks/video;
@@ -655,7 +651,6 @@
 				E4F3BA8B12F4C4C9002D19BB /* ofFmodSoundPlayer.h in Headers */,
 				E4F3BA8F12F4C4C9002D19BB /* ofSoundPlayer.h in Headers */,
 				E4F3BA9112F4C4C9002D19BB /* ofSoundStream.h in Headers */,
-				6447BB531917D95500AA9CCF /* ofAVFMovieRenderer.h in Headers */,
 				E4F3BAC212F4C72F002D19BB /* ofMath.h in Headers */,
 				E4F3BAC412F4C72F002D19BB /* ofMatrix3x3.h in Headers */,
 				E4F3BAC612F4C72F002D19BB /* ofMatrix4x4.h in Headers */,
@@ -666,6 +661,7 @@
 				E4F3BACE12F4C72F002D19BB /* ofVectorMath.h in Headers */,
 				E4F3BADA12F4C73C002D19BB /* ofBaseTypes.h in Headers */,
 				E4F3BADC12F4C73C002D19BB /* ofColor.h in Headers */,
+				6433E9A819BCDB8900869EE5 /* ofAVFMovieRenderer.h in Headers */,
 				E4F3BADE12F4C73C002D19BB /* ofPoint.h in Headers */,
 				E4F3BAE012F4C73C002D19BB /* ofRectangle.h in Headers */,
 				E4F3BAE112F4C73C002D19BB /* ofTypes.h in Headers */,
@@ -687,6 +683,7 @@
 				DA94C2F01301D32200CCC773 /* ofRendererCollection.h in Headers */,
 				53EEEF4B130766EF0027C199 /* ofMesh.h in Headers */,
 				DA48FE78131D85A6000062BC /* ofPolyline.h in Headers */,
+				6433E9AA19BCDB8900869EE5 /* ofAVFoundationPlayer.h in Headers */,
 				DACFA8DB132D09E8008D4B7A /* ofFbo.h in Headers */,
 				DACFA8DD132D09E8008D4B7A /* ofGLRenderer.h in Headers */,
 				DACFA8DE132D09E8008D4B7A /* ofGLUtils.h in Headers */,
@@ -708,7 +705,6 @@
 				DAC22D4216E7A4AF0020226D /* ofParameterGroup.h in Headers */,
 				2E6EA7011603A9E400B7ADF3 /* of3dGraphics.h in Headers */,
 				2E6EA7061603AABD00B7ADF3 /* of3dPrimitives.h in Headers */,
-				6447BB551917D95500AA9CCF /* ofAVFoundationPlayer.h in Headers */,
 				22FAD01F17049373002A7EB3 /* ofAppGLFWWindow.h in Headers */,
 				22769592170D9DD200604FC3 /* ofMatrixStack.h in Headers */,
 				22246D94176C9987008A8AF4 /* ofGLProgrammableRenderer.h in Headers */,
@@ -786,7 +782,6 @@
 				E4F3BA8A12F4C4C9002D19BB /* ofFmodSoundPlayer.cpp in Sources */,
 				E4F3BA8E12F4C4C9002D19BB /* ofSoundPlayer.cpp in Sources */,
 				E4F3BA9012F4C4C9002D19BB /* ofSoundStream.cpp in Sources */,
-				6447BB561917D95500AA9CCF /* ofAVFoundationPlayer.mm in Sources */,
 				E4F3BAC112F4C72F002D19BB /* ofMath.cpp in Sources */,
 				E4F3BAC312F4C72F002D19BB /* ofMatrix3x3.cpp in Sources */,
 				E4F3BAC512F4C72F002D19BB /* ofMatrix4x4.cpp in Sources */,
@@ -800,7 +795,6 @@
 				E4F3BAF412F4C745002D19BB /* ofLog.cpp in Sources */,
 				E4F3BAF712F4C745002D19BB /* ofSystemUtils.cpp in Sources */,
 				E4F3BAF912F4C745002D19BB /* ofThread.cpp in Sources */,
-				6447BB541917D95500AA9CCF /* ofAVFMovieRenderer.m in Sources */,
 				E4F3BAFB12F4C745002D19BB /* ofURLFileLoader.cpp in Sources */,
 				E4F3BAFD12F4C745002D19BB /* ofUtils.cpp in Sources */,
 				E4F3BB1812F4C752002D19BB /* ofBitmapFont.cpp in Sources */,
@@ -822,6 +816,7 @@
 				DACFA8E5132D09E8008D4B7A /* ofTexture.cpp in Sources */,
 				DACFA8E7132D09E8008D4B7A /* ofVbo.cpp in Sources */,
 				DACFA8E9132D09E8008D4B7A /* ofVboMesh.cpp in Sources */,
+				6433E9A919BCDB8900869EE5 /* ofAVFMovieRenderer.m in Sources */,
 				92C55F88132DA7DD00EC2631 /* ofPath.cpp in Sources */,
 				E4C5E388131AC1B10050F992 /* ofRtAudioSoundStream.cpp in Sources */,
 				772BDF73146928600030F0EE /* ofOpenALSoundPlayer.cpp in Sources */,
@@ -831,6 +826,7 @@
 				FDFC9EF31600D70700EDD797 /* ofQTKitMovieRenderer.m in Sources */,
 				DAC22D3F16E7A4AF0020226D /* ofParameter.cpp in Sources */,
 				DAC22D4116E7A4AF0020226D /* ofParameterGroup.cpp in Sources */,
+				6433E9AB19BCDB8900869EE5 /* ofAVFoundationPlayer.mm in Sources */,
 				67D96B971651AF6D00D5242D /* ofGLUtils.cpp in Sources */,
 				22FAD01E17049373002A7EB3 /* ofAppGLFWWindow.cpp in Sources */,
 				22A1C453170AFCB60079E473 /* ofRendererCollection.cpp in Sources */,
@@ -848,6 +844,7 @@
 		E4B27C1610CBEB8E00536013 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../lib/osx/";
 				COPY_PHASE_STRIP = NO;
@@ -872,12 +869,14 @@
 				OBJROOT = "$(SRCROOT)/../../lib/osx/build/debug/";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = openFrameworksDebug;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		E4B27C1710CBEB8E00536013 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../lib/osx/";
 				COPY_PHASE_STRIP = YES;
@@ -904,6 +903,7 @@
 				OBJROOT = "$(SRCROOT)/../../lib/osx/build/release/";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = openFrameworks;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -911,11 +911,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E432815F138AC0470047C5CB /* Debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++98";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../lib/osx/";
 				CONFIGURATION_TEMP_DIR = "$(SRCROOT)/../../lib/osx/build/debug/";
 				OBJROOT = "$(SRCROOT)/../../lib/osx/build/debug/";
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -923,11 +924,12 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E4328160138AC04A0047C5CB /* Release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++98";
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../lib/osx/";
 				CONFIGURATION_TEMP_DIR = "$(SRCROOT)/../../lib/osx/build/release/";
 				OBJROOT = "$(SRCROOT)/../../lib/osx/build/release";
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
