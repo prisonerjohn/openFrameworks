@@ -19,8 +19,7 @@
 #include "ofURLFileLoader.h"
 
 
-// adding this for vc2010 compile: error C3861: 'closeQuicktime': identifier not found
-#if defined (TARGET_WIN32) || defined(TARGET_OSX)
+#if defined(TARGET_OSX)
 	#include "ofQtUtils.h"
 #endif
 
@@ -282,7 +281,7 @@ void ofGLReadyCallback(){
 	char* glslVer = (char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
 	ofLogVerbose("ofAppRunner") << "GLSL:     " << (glslVer ? glslVer : "Error getting GLSL version.");
 
-    if(ofGetGLProgrammableRenderer()){
+    if(ofIsGLProgrammableRenderer()){
     	ofGetGLProgrammableRenderer()->setup(glslVersionFromGL(glVersionMajor,glVersionMinor));
     }
 

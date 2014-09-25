@@ -3,7 +3,7 @@
 //  AVFoundationTest
 //
 //  Created by Sam Kronick on 5/31/13.
-//
+//  Modified by James George and Elie Zananiri.
 //
 
 #include "ofAVFoundationPlayer.h"
@@ -13,11 +13,11 @@
 ofAVFoundationPlayer::ofAVFoundationPlayer()
 {
     moviePlayer = NULL;
-	bNewFrame = false;
+    bNewFrame = false;
     bPaused = true;
-	duration = 0.0f;
+    duration = 0.0f;
     speed = 1.0f;
-	
+    
     scrubToTime = 0.0;
     bInitialized = false;
     
@@ -29,56 +29,45 @@ ofAVFoundationPlayer::ofAVFoundationPlayer()
 //--------------------------------------------------------------
 ofAVFoundationPlayer::~ofAVFoundationPlayer()
 {
-	close();
+    close();
 }
 
 //--------------------------------------------------------------
 bool ofAVFoundationPlayer::loadMovie(string path)
 {
-
     if (bInitialized) {
         close();
     }
-	
-	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-	
-    moviePlayer = [[AVFMovieRenderer alloc] init];
-    [moviePlayer setUseAlpha:(pixelFormat == OF_PIXELS_RGBA)];
-    [moviePlayer setUseTexture:YES];
+    
+    @autoreleasepool {
+        moviePlayer = [[AVFMovieRenderer alloc] init];
+        [moviePlayer setUseAlpha:(pixelFormat == OF_PIXELS_RGBA)];
+        [moviePlayer setUseTexture:YES];
 
 
-	if (Poco::icompare(path.substr(0, 7), "http://")  == 0 ||
-        Poco::icompare(path.substr(0, 8), "https://") == 0 ||
-        Poco::icompare(path.substr(0, 7), "rtsp://")  == 0) {
-        [moviePlayer loadURLPath:[NSString stringWithUTF8String:path.c_str()]];
+        if (Poco::icompare(path.substr(0, 7), "http://")  == 0 ||
+            Poco::icompare(path.substr(0, 8), "https://") == 0 ||
+            Poco::icompare(path.substr(0, 7), "rtsp://")  == 0) {
+            [moviePlayer loadURLPath:[NSString stringWithUTF8String:path.c_str()]];
+        }
+        else {
+            path = ofToDataPath(path, false);
+            [moviePlayer loadFilePath:[NSString stringWithUTF8String:path.c_str()]];
+        }
     }
-    else {
-        path = ofToDataPath(path, false);
-        [moviePlayer loadFilePath:[NSString stringWithUTF8String:path.c_str()]];
-    }
-	[pool release];
     
     bShouldPlay = false;
     return true;
 }
 
 //--------------------------------------------------------------
-void ofAVFoundationPlayer::closeMovie()
-{
-    close();
-}
-
-//--------------------------------------------------------------
 void ofAVFoundationPlayer::close()
 {
     pixels.clear();
-	
+    
     if (moviePlayer != nil) {
-//		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         [moviePlayer release];
         moviePlayer = nil;
-//		[pool release];
-
     }
     
     bInitialized = false;
@@ -98,38 +87,41 @@ void ofAVFoundationPlayer::update()
     
     if ([moviePlayer isLoaded]) {
         if (!bInitialized) {
-			reallocatePixels();
+            reallocatePixels();
             bInitialized = true;
 
             if (scrubToTime != 0.0f) {
-				setTime(scrubToTime);
-				scrubToTime = 0.0f;
-			}
+                setTime(scrubToTime);
+                scrubToTime = 0.0f;
+            }
             
-			if (bShouldPlay){
-				play();
-				bShouldPlay = false;
-			}
+            if (bShouldPlay){
+                play();
+                bShouldPlay = false;
+            }
         }
         
-		bNewFrame = [moviePlayer update];
+        bNewFrame = [moviePlayer update];
         bHavePixelsChanged = bNewFrame;
-    }
-    else {
-        ofLogNotice("ofAVFoundationPlayer::update()") << "Movie player not ready";
+        
+        // Don't get the pixels every frame if it hasn't updated
+        if (bHavePixelsChanged) {
+            [moviePlayer pixels:pixels.getPixels()];
+            bHavePixelsChanged = false;
+        }
     }
 }
 
 //--------------------------------------------------------------
 void ofAVFoundationPlayer::play()
 {
-	if (bInitialized) {
-        ofLogVerbose("ofAVFoundationPlayer::play()") << "Initialized and playing at time " << getCurrentTime();
-		[moviePlayer play];
-	}
-	else {
-		bShouldPlay = true;
-	}
+    if (bInitialized) {
+        ofLogVerbose("ofAVFoundationPlayer::play") << "Initialized and playing at time " << getCurrentTime();
+        [moviePlayer play];
+    }
+    else {
+        bShouldPlay = true;
+    }
 }
 
 //--------------------------------------------------------------
@@ -139,172 +131,121 @@ void ofAVFoundationPlayer::stop()
 }
 
 //--------------------------------------------------------------
-bool ofAVFoundationPlayer::isFrameNew()
+bool ofAVFoundationPlayer::isFrameNew() const
 {
     return bNewFrame;
 }
 
 //--------------------------------------------------------------
-float ofAVFoundationPlayer::getAmplitude(int channel)
-{
-    return getAmplitudeAt(getPosition(), channel);
-}
-
-//--------------------------------------------------------------
-float ofAVFoundationPlayer::getAmplitudeAt(float pos, int channel)
-{
-    pos = ofClamp(pos, 0, 1);
-    channel = ofClamp(channel, 0, 1);
-    
-    if (!moviePlayer || ![moviePlayer isAudioLoaded] || [moviePlayer numAmplitudes] == 0 || !bInitialized) {
-        return 0;
-    }
-    
-    int idx = (int)(pos * ([moviePlayer numAmplitudes] - 2));
-    
-    // Make sure the index is pointing at the right channel
-    // EZ: I know this is ghetto, but it works...
-    if (idx % 2 == 0 && channel == 1) {
-        ++idx;
-    }
-    else if (idx % 2 == 1 && channel == 0) {
-        --idx;
-    }
-
-    float amp;
-    [moviePlayer.amplitudes getBytes:&amp range:NSMakeRange(idx * sizeof(float), sizeof(float))];
-    return amp;
-}
-
-//--------------------------------------------------------------
-int ofAVFoundationPlayer::getNumAmplitudes()
-{
-    return [moviePlayer numAmplitudes];
-}
-
-//--------------------------------------------------------------
-float* ofAVFoundationPlayer::getAllAmplitudes()
-{
-    
-    return (float *)[moviePlayer.amplitudes bytes];
-}
-
-//--------------------------------------------------------------
 unsigned char * ofAVFoundationPlayer::getPixels()
 {
-	return getPixelsRef().getPixels();
+    return getPixelsRef().getPixels();
 }
 
 //--------------------------------------------------------------
-ofPixelsRef ofAVFoundationPlayer::getPixelsRef()
+const ofPixels & ofAVFoundationPlayer::getPixelsRef() const
 {
-	if (isLoaded()) {
-		// Don't get the pixels every frame if it hasn't updated
-		if (bHavePixelsChanged) {
-			[moviePlayer pixels:pixels.getPixels()];
-			bHavePixelsChanged = false;
-		}
-	}
-	else {
-		ofLogError("ofAVFoundationPlayer::getPixelsRef()") << "Returning pixels that may be unallocated. Make sure to initialize the video player before calling getPixelsRef.";
-	}
-	return pixels;
+    if (!isLoaded() ){
+        ofLogError("ofAVFoundationPlayer::getPixelsRef()") << "Returning pixels that may be unallocated. Make sure to initialize the video player before calling getPixelsRef.";
+    }
+    return pixels;
 }
 
 //--------------------------------------------------------------
-ofTexture* ofAVFoundationPlayer::getTexture()
+ofPixels & ofAVFoundationPlayer::getPixelsRef()
 {
-	//TODO: Allow AVF's direct to texture
-	if (moviePlayer.textureAllocated) {
-		updateTexture();
-	}
-	return &tex;
-
-//    return NULL;
+    if (!isLoaded() ){
+        ofLogError("ofAVFoundationPlayer::getPixelsRef()") << "Returning pixels that may be unallocated. Make sure to initialize the video player before calling getPixelsRef.";
+    }
+    return pixels;
 }
 
+
 //--------------------------------------------------------------
-ofTexture& ofAVFoundationPlayer::getTextureReference()
+ofTexture * ofAVFoundationPlayer::getTexture()
 {
-//	getTexture();
-	updateTexture();
-	return tex;
+    //TODO: Allow AVF's direct to texture
+    if (moviePlayer.textureAllocated) {
+        updateTexture();
+    }
+    return &tex;
 }
 
 //--------------------------------------------------------------
-bool ofAVFoundationPlayer::isLoading()
+ofTexture & ofAVFoundationPlayer::getTextureReference()
+{
+    updateTexture();
+    return tex;
+}
+
+//--------------------------------------------------------------
+bool ofAVFoundationPlayer::isLoading() const
 {
     return moviePlayer && [moviePlayer isLoading];
 }
 
 //--------------------------------------------------------------
-bool ofAVFoundationPlayer::isLoaded()
+bool ofAVFoundationPlayer::isLoaded() const
 {
     return bInitialized;
 }
 
 //--------------------------------------------------------------
-bool ofAVFoundationPlayer::isAudioLoaded()
-{
-    return moviePlayer && [moviePlayer isAudioLoaded];
-}
-
-//--------------------------------------------------------------
-bool ofAVFoundationPlayer::isPlaying()
+bool ofAVFoundationPlayer::isPlaying() const
 {
     return moviePlayer && [moviePlayer isPlaying];
 }
 
 //--------------------------------------------------------------
-bool ofAVFoundationPlayer::getIsMovieDone()
+bool ofAVFoundationPlayer::getIsMovieDone() const
 {
     return moviePlayer.isMovieDone;
 }
 
 //--------------------------------------------------------------
-float ofAVFoundationPlayer::getPosition()
+float ofAVFoundationPlayer::getPosition() const
 {
     return moviePlayer.position;
 }
 
 //--------------------------------------------------------------
-float ofAVFoundationPlayer::getCurrentTime()
+float ofAVFoundationPlayer::getCurrentTime() const
 {
     return moviePlayer.currentTime;
 }
 
 //--------------------------------------------------------------
-float ofAVFoundationPlayer::getPositionInSeconds()
+float ofAVFoundationPlayer::getPositionInSeconds() const
 {
     return getCurrentTime();
 }
 
 //--------------------------------------------------------------
-int ofAVFoundationPlayer::getCurrentFrame()
+int ofAVFoundationPlayer::getCurrentFrame() const
 {
     return moviePlayer.currentFrame;
 }
 
 //--------------------------------------------------------------
-float ofAVFoundationPlayer::getDuration()
+float ofAVFoundationPlayer::getDuration() const
 {
     return moviePlayer.duration;
 }
 
 //--------------------------------------------------------------
-int ofAVFoundationPlayer::getTotalNumFrames()
+int ofAVFoundationPlayer::getTotalNumFrames() const
 {
     return moviePlayer.totalFrames;
 }
 
 //--------------------------------------------------------------
-bool ofAVFoundationPlayer::isPaused()
+bool ofAVFoundationPlayer::isPaused() const
 {
     return moviePlayer && [moviePlayer isPaused];
 }
 
 //--------------------------------------------------------------
-float ofAVFoundationPlayer::getSpeed()
+float ofAVFoundationPlayer::getSpeed() const
 {
     if (moviePlayer) {
         return moviePlayer.playbackRate;
@@ -314,16 +255,16 @@ float ofAVFoundationPlayer::getSpeed()
 }
 
 //--------------------------------------------------------------
-ofLoopType ofAVFoundationPlayer::getLoopState()
+ofLoopType ofAVFoundationPlayer::getLoopState() const
 {
     if (moviePlayer && [moviePlayer loops])
         return OF_LOOP_NORMAL;
     
-	return OF_LOOP_NONE;
+    return OF_LOOP_NONE;
 }
 
 //--------------------------------------------------------------
-float ofAVFoundationPlayer::getVolume()
+float ofAVFoundationPlayer::getVolume() const
 {
     if (moviePlayer) {
         return moviePlayer.volume;
@@ -341,13 +282,13 @@ void ofAVFoundationPlayer::setPosition(float pct)
 //--------------------------------------------------------------
 void ofAVFoundationPlayer::setTime(float position)
 {
-	if (![moviePlayer isLoaded]) {
-		ofLogNotice("ofAVFoundationPlayer::setCurrentTime()") << "Video player not ready, declaring to scrub to time " << scrubToTime;
-		scrubToTime = position;
-	}
-	else {
+    if (![moviePlayer isLoaded]) {
+        ofLogNotice("ofAVFoundationPlayer::setCurrentTime") << "Video player not ready, declaring to scrub to time " << scrubToTime;
+        scrubToTime = position;
+    }
+    else {
         [moviePlayer setCurrentTime:position];
-	}
+    }
 }
 
 //--------------------------------------------------------------
@@ -371,7 +312,7 @@ void ofAVFoundationPlayer::setVolume(float volume)
 //--------------------------------------------------------------
 void ofAVFoundationPlayer::setBalance(float balance)
 {
-
+    ofLogWarning("ofAVFoundationPlayer::setBalance") << "Not implemented!";
 }
 
 //--------------------------------------------------------------
@@ -414,11 +355,11 @@ bool ofAVFoundationPlayer::setPixelFormat(ofPixelFormat newPixelFormat)
             loadMovie(moviePath);
         }
     }
-	return true;
+    return true;
 }
 
 //--------------------------------------------------------------
-ofPixelFormat ofAVFoundationPlayer::getPixelFormat()
+ofPixelFormat ofAVFoundationPlayer::getPixelFormat() const
 {
     return pixelFormat;
 }
@@ -428,7 +369,7 @@ void ofAVFoundationPlayer::draw(float x, float y)
 {
     if (!bInitialized) return;
     
-	draw(x, y, getWidth(), getHeight());
+    draw(x, y, getWidth(), getHeight());
 }
 
 //--------------------------------------------------------------
@@ -436,18 +377,18 @@ void ofAVFoundationPlayer::draw(float x, float y, float w, float h)
 {
     if (!bInitialized) return;
     
-	updateTexture();
-	tex.draw(x, y, w, h);
+    updateTexture();
+    tex.draw(x, y, w, h);
 }
 
 //--------------------------------------------------------------
-float ofAVFoundationPlayer::getWidth()
+float ofAVFoundationPlayer::getWidth() const
 {
     return moviePlayer.width;
 }
 
 //--------------------------------------------------------------
-float ofAVFoundationPlayer::getHeight()
+float ofAVFoundationPlayer::getHeight() const
 {
     return moviePlayer.height;
 }
@@ -455,38 +396,43 @@ float ofAVFoundationPlayer::getHeight()
 //--------------------------------------------------------------
 void ofAVFoundationPlayer::firstFrame()
 {
-    //TODO:
+    if (moviePlayer == NULL) {
+        return;
+    }
+    
+    [moviePlayer setPosition:0];
 }
 
 //--------------------------------------------------------------
 void ofAVFoundationPlayer::nextFrame()
 {
-    //TODO:
+    int nextFrameNum = ofClamp(getCurrentFrame() + 1, 0, getTotalNumFrames());
+    setFrame(nextFrameNum);
 }
 
 //--------------------------------------------------------------
 void ofAVFoundationPlayer::previousFrame()
 {
-	//TODO:
+    int prevFrameNum = ofClamp(getCurrentFrame() - 1, 0, getTotalNumFrames());
+    setFrame(prevFrameNum);
 }
 
 //--------------------------------------------------------------
 void ofAVFoundationPlayer::updateTexture()
 {
-    if(!moviePlayer.textureAllocated) {
-		return;
-	}
-	
-	tex.setUseExternalTextureID(moviePlayer.textureID);
-	ofTextureData& data = tex.getTextureData();
-	data.textureTarget = moviePlayer.textureTarget;
-	data.width = getWidth();
-	data.height = getHeight();
-	data.tex_w = getWidth();
-	data.tex_h = getHeight();
-	data.tex_t = getWidth();
-	data.tex_u = getHeight();
-
+    if (!moviePlayer.textureAllocated) {
+        return;
+    }
+    
+    tex.setUseExternalTextureID(moviePlayer.textureID);
+    ofTextureData& data = tex.getTextureData();
+    data.textureTarget = moviePlayer.textureTarget;
+    data.width = getWidth();
+    data.height = getHeight();
+    data.tex_w = getWidth();
+    data.tex_h = getHeight();
+    data.tex_t = getWidth();
+    data.tex_u = getHeight();
 }
 
 //--------------------------------------------------------------

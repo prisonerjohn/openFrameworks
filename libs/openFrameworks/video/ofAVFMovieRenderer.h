@@ -1,13 +1,10 @@
-
-
 //
 //  ofxAVFVideoRenderer.h
 //  AVFoundationTest
 //
 //  Created by Sam Kronick on 5/31/13.
+//  Modified by James George and Elie Zananiri.
 //
-//
-
 
 #import <Cocoa/Cocoa.h>
 #import <Quartz/Quartz.h>
@@ -16,17 +13,15 @@
 
 @interface AVFMovieRenderer : NSObject
 {
-    BOOL _bTheFutureIsNow;
-    
     AVPlayer * _player;
     AVPlayerItem * _playerItem;
-
+    
     id _playerItemVideoOutput;
     CVOpenGLTextureCacheRef _textureCache;
-	CVOpenGLTextureRef _latestTextureFrame;
-	CVPixelBufferRef _latestPixelFrame;
-
-	BOOL _useTexture;
+    CVOpenGLTextureRef _latestTextureFrame;
+    CVPixelBufferRef _latestPixelFrame;
+    
+    BOOL _useTexture;
     BOOL _useAlpha;
     
     CGSize _videoSize;
@@ -42,11 +37,6 @@
     BOOL _bAudioLoaded;
     BOOL _bPaused;
     BOOL _bMovieDone;
-    	
-    // audio stuff
-    NSMutableData *_amplitudes;
-    int _numAmplitudes;
-    id _periodicTimeObserver;
 }
 
 @property (nonatomic, retain) AVPlayer * player;
@@ -56,7 +46,6 @@
 
 @property (nonatomic, assign, readonly, getter = isLoading) BOOL bLoading;
 @property (nonatomic, assign, readonly, getter = isLoaded) BOOL bLoaded;
-@property (nonatomic, assign, readonly, getter = isAudioLoaded) BOOL bAudioLoaded;
 @property (nonatomic, assign, getter = isPaused, setter = setPaused:) BOOL bPaused;
 @property (nonatomic, assign, readonly, getter = isMovieDone) BOOL bMovieDone;
 @property (nonatomic, assign, readonly) BOOL isPlaying;
@@ -77,9 +66,6 @@
 @property (nonatomic, assign) double playbackRate;
 @property (nonatomic, assign, getter = loops, setter = setLoops:) BOOL bLoops;
 @property (nonatomic, assign) float volume;
-
-@property (nonatomic, retain, readonly) NSMutableData* amplitudes;
-@property (nonatomic, assign, readonly) int numAmplitudes;
 
 - (void)loadFilePath:(NSString *)filePath;
 - (void)loadURLPath:(NSString *)urlPath;

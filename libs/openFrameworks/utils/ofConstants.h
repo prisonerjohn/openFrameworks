@@ -4,7 +4,7 @@
 //-------------------------------
 #define OF_VERSION_MAJOR 0
 #define OF_VERSION_MINOR 8
-#define OF_VERSION_PATCH 3
+#define OF_VERSION_PATCH 4
 
 //-------------------------------
 
@@ -308,39 +308,33 @@ typedef TESSindex ofIndexType;
 
 //------------------------------------------------  video player
 // check if any video player system is already defined from the compiler
-#if !defined(OF_VIDEO_PLAYER_GSTREAMER) && !defined(OF_VIDEO_PLAYER_QUICKTIME) && !defined(OF_VIDEO_PLAYER_AVFOUNDATION) && !defined(OF_VIDEO_PLAYER_DIRECTSHOW) && !defined(OF_VIDEO_PLAYER_ANDROID) && !defined(OF_VIDEO_PLAYER_IOS) && !defined(OF_VIDEO_PLAYER_EMSCRIPTEN)
-	#ifdef TARGET_LINUX
-		#define OF_VIDEO_PLAYER_GSTREAMER
-
-	 #elif defined(TARGET_OSX)
+#if !defined(OF_VIDEO_PLAYER_GSTREAMER) && !defined(OF_VIDEO_PLAYER_IOS) && !defined(OF_VIDEO_PLAYER_QUICKTIME) && !defined(OF_VIDEO_PLAYER_AVFOUNDATION) && !defined(OF_VIDEO_PLAYER_EMSCRIPTEN)
+    #ifdef TARGET_LINUX
+        #define OF_VIDEO_PLAYER_GSTREAMER
+    #elif defined(TARGET_ANDROID)
+        #define OF_VIDEO_PLAYER_ANDROID
+    #elif defined(TARGET_OF_IOS)
+        #define OF_VIDEO_PLAYER_IOS
+    #elif defined(TARGET_OSX)
         #ifdef TARGET_64_BIT
             #define OF_VIDEO_PLAYER_AVFOUNDATION
         #else
-            //10.8 and 10.9 users get AVF, 10.7 users get QTKit for 10.6 users we use olschool QuickTime
+            //for 10.8 and 10.9 users we use AVFoundation, for 10.7 we use QTKit, for 10.6 users we use QuickTime
             #ifndef MAC_OS_X_VERSION_10_7
                 #define OF_VIDEO_PLAYER_QUICKTIME
-            #elseif MAC_OS_X_VERSION_10_8
+            #elseif !defined(MAC_OS_X_VERSION_10_8)
                 #define OF_VIDEO_PLAYER_QTKIT
             #else
                 #define OF_VIDEO_PLAYER_AVFOUNDATION
             #endif
         #endif
-
-	#elif defined(TARGET_WIN32)
+    #elif defined(TARGET_WIN32)
 		#define OF_VIDEO_PLAYER_DIRECTSHOW
-
-	#elif defined(TARGET_ANDROID)
-		#define OF_VIDEO_PLAYER_ANDROID
-
-	#elif defined(TARGET_OF_IOS)
-		#define OF_VIDEO_PLAYER_IOS
-	
-	#elif defined(TARGET_EMSCRIPTEN)
-		#define OF_VIDEO_PLAYER_EMSCRIPTEN
-	
-	#else
-		#define OF_VIDEO_PLAYER_QUICKTIME
-	#endif
+    #elif defined(TARGET_EMSCRIPTEN)
+        #define OF_VIDEO_PLAYER_EMSCRIPTEN
+    #else
+        #define OF_VIDEO_PLAYER_QUICKTIME
+    #endif
 #endif
 
 //------------------------------------------------ soundstream
@@ -522,15 +516,6 @@ enum ofImageType{
  	OF_IMAGE_UNDEFINED		= 0x03
 };
 
-enum ofPixelFormat{
-	OF_PIXELS_MONO = 0, 
-	OF_PIXELS_RGB,
-	OF_PIXELS_RGBA,
-	OF_PIXELS_BGRA,
-	OF_PIXELS_RGB565,
-	OF_PIXELS_UNKNOWN
-};
-
 #define		OF_MAX_STYLE_HISTORY	32
 #define		OF_MAX_VIEWPORT_HISTORY	32
 #define		OF_MAX_CIRCLE_PTS 1024
@@ -703,6 +688,43 @@ enum ofMatrixMode {OF_MATRIX_MODELVIEW=0, OF_MATRIX_PROJECTION, OF_MATRIX_TEXTUR
 	#define OF_CONSOLE_COLOR_WHITE (37)
 
 #endif
+
+
+enum ofPixelFormat{
+	// grayscale
+	OF_PIXELS_GRAY = 0,
+	OF_PIXELS_GRAY_ALPHA = 1,
+
+	// rgb (can be 8,16 or 32 bpp depending on pixeltype)
+	OF_PIXELS_RGB=2,
+	OF_PIXELS_BGR=3,
+	OF_PIXELS_RGBA=4,
+	OF_PIXELS_BGRA=5,
+
+	// rgb 16bit
+	OF_PIXELS_RGB565=6,
+
+	// yuv
+	OF_PIXELS_NV12=7,
+	OF_PIXELS_NV21=8,
+	OF_PIXELS_YV12=9,
+	OF_PIXELS_I420=10,
+	OF_PIXELS_YUY2=11,
+
+	// yuv planes
+	OF_PIXELS_Y,
+	OF_PIXELS_U,
+	OF_PIXELS_V,
+	OF_PIXELS_UV,
+	OF_PIXELS_VU,
+
+	OF_PIXELS_UNKNOWN=-1,
+	OF_PIXELS_NATIVE=-2
+};
+
+#define OF_PIXELS_MONO OF_PIXELS_GRAY
+#define OF_PIXELS_R OF_PIXELS_GRAY
+#define OF_PIXELS_RG OF_PIXELS_GRAY_ALPHA
 
 
 //--------------------------------------------
