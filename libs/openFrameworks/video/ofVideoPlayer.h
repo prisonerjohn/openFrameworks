@@ -52,9 +52,6 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 
 		ofVideoPlayer ();
 
-		void						setPlayer(shared_ptr<ofBaseVideoPlayer> newPlayer);
-		shared_ptr<ofBaseVideoPlayer>	getPlayer();
-
 		bool 				loadMovie(string name);
 	    string				getMoviePath() const;
 
@@ -119,6 +116,20 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 		bool				isLoaded() const;
 		bool				isPlaying() const;
 		bool 				isInitialized() const;
+
+		void				setPlayer(shared_ptr<ofBaseVideoPlayer> newPlayer);
+		shared_ptr<ofBaseVideoPlayer>	getPlayer();
+		const shared_ptr<ofBaseVideoPlayer>	getPlayer() const;
+
+		template<typename PlayerType>
+		shared_ptr<PlayerType> getPlayer(){
+			return dynamic_pointer_cast<PlayerType>(getPlayer());
+		}
+
+		template<typename PlayerType>
+		const shared_ptr<PlayerType> getPlayer() const{
+			return dynamic_pointer_cast<PlayerType>(getPlayer());
+		}
 
 		//this is kept as legacy to support people accessing width and height directly. 
 		mutable int         height;
