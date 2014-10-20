@@ -8,55 +8,56 @@
 class DirectShowVideo; 
 
 class ofDirectShowPlayer : public ofBaseVideoPlayer{
-	public:
+    public:
 
-		ofDirectShowPlayer();
-		~ofDirectShowPlayer();
+        ofDirectShowPlayer();
+        ~ofDirectShowPlayer();
 
-		bool loadMovie(string path);
-		void update();
-		void draw(float x, float y);
+        bool                load(string path);
+        void                update();
+        void                draw(float x, float y);
 
-		 void				close();
-	
-		 void				play();
-		 void				stop();		
-	
-		 bool 				isFrameNew();
-		 unsigned char * 	getPixels();
-	     ofPixelsRef		getPixelsRef();
-	
-		 float 				getWidth();
-		 float 				getHeight();
-	
-		 bool				isPaused();
-		 bool				isLoaded();
-		 bool				isPlaying();
-	
-		 bool setPixelFormat(ofPixelFormat pixelFormat);
-		 ofPixelFormat 		getPixelFormat();
+        void                close();
+    
+        void                play();
+        void                stop();     
+    
+        bool                isFrameNew() const;
 
-		 float 				getPosition();
-		 float 				getSpeed();
-		 float 				getDuration();
-		 bool				getIsMovieDone();
-	
-		 void 				setPaused(bool bPause);
-		 void 				setPosition(float pct);
-		 void 				setVolume(float volume); // 0..1
-		 void 				setLoopState(ofLoopType state);
-		 void   			setSpeed(float speed);
-		 void				setFrame(int frame);  // frame 0 = first frame...
-	
-		 int				getCurrentFrame();
-		 int				getTotalNumFrames();
-		 ofLoopType			getLoopState();
-	
-		 void				firstFrame();
-		 void				nextFrame();
-		 void				previousFrame();
+        const ofPixels &    getPixels() const;
+        ofPixels &          getPixels();
+    
+        float               getWidth() const;
+        float               getHeight() const;
+    
+        bool                isPaused() const;
+        bool                isLoaded() const;
+        bool                isPlaying() const;
+    
+        bool                setPixelFormat(ofPixelFormat pixelFormat);
+        ofPixelFormat       getPixelFormat() const;
 
-	protected:
-		DirectShowVideo * player; 
-		ofPixels pix;
+        float               getPosition() const;
+        float               getSpeed() const;
+        float               getDuration() const;
+        bool                getIsMovieDone() const;
+    
+        void                setPaused(bool bPause);
+        void                setPosition(float pct);
+        void                setVolume(float volume); // 0..1
+        void                setLoopState(ofLoopType state);
+        void                setSpeed(float speed);
+        void                setFrame(int frame);  // frame 0 = first frame...
+    
+        int                 getCurrentFrame() const;
+        int                 getTotalNumFrames() const;
+        ofLoopType          getLoopState() const;
+    
+        void                firstFrame();
+        void                nextFrame();
+        void                previousFrame();
+
+    protected:
+        DirectShowVideo *   player; 
+        ofPixels            pix;
 };

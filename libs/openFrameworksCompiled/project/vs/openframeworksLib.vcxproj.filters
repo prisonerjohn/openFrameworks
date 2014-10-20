@@ -168,6 +168,9 @@
     <ClInclude Include="..\..\..\openFrameworks\graphics\ofBitmapFont.h">
       <Filter>libs\openFrameworks\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\graphics\ofCairoRenderer.h">
+      <Filter>libs\openFrameworks\graphics</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\openFrameworks\graphics\ofGraphics.h">
       <Filter>libs\openFrameworks\graphics</Filter>
     </ClInclude>
@@ -255,11 +258,17 @@
     <ClInclude Include="..\..\..\openFrameworks\utils\ofXml.h">
       <Filter>libs\openFrameworks\utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\gl\ofBufferObject.h">
+      <Filter>libs\openFrameworks\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\utils\ofFpsCounter.h">
+      <Filter>libs\openFrameworks\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\utils\ofTimer.h">
+      <Filter>libs\openFrameworks\utils</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\openFrameworks\video\ofDirectShowPlayer.h">
       <Filter>libs\openFrameworks\video</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\openFrameworks\graphics\ofCairoRenderer.h">
-      <Filter>libs\openFrameworks\graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -356,6 +365,9 @@
     <ClCompile Include="..\..\..\openFrameworks\graphics\ofBitmapFont.cpp">
       <Filter>libs\openFrameworks\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\openFrameworks\graphics\ofCairoRenderer.cpp">
+      <Filter>libs\openFrameworks\graphics</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\openFrameworks\graphics\ofGraphics.cpp">
       <Filter>libs\openFrameworks\graphics</Filter>
     </ClCompile>
@@ -440,11 +452,17 @@
     <ClCompile Include="..\..\..\openFrameworks\utils\ofXml.cpp">
       <Filter>libs\openFrameworks\utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\openFrameworks\utils\ofFpsCounter.cpp">
+      <Filter>libs\openFrameworks\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\openFrameworks\utils\ofTimer.cpp">
+      <Filter>libs\openFrameworks\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\openFrameworks\gl\ofBufferObject.cpp">
+      <Filter>libs\openFrameworks\gl</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\openFrameworks\video\ofDirectShowPlayer.cpp">
       <Filter>libs\openFrameworks\video</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\openFrameworks\graphics\ofCairoRenderer.cpp">
-      <Filter>libs\openFrameworks\graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

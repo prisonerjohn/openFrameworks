@@ -26,8 +26,8 @@
 #endif
 
 #ifdef OF_VIDEO_PLAYER_DIRECTSHOW
-	#include "ofDirectShowPlayer.h"
-	#define OF_VID_PLAYER_TYPE ofDirectShowPlayer
+    #include "ofDirectShowPlayer.h"
+    #define OF_VID_PLAYER_TYPE ofDirectShowPlayer
 #endif
 
 #ifdef OF_VIDEO_PLAYER_IOS
@@ -52,7 +52,9 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 
 		ofVideoPlayer ();
 
-		bool 				loadMovie(string name);
+
+		bool 				load(string name);
+		OF_DEPRECATED_MSG("Use load instead",bool loadMovie(string name));
 	    string				getMoviePath() const;
 
 		bool				setPixelFormat(ofPixelFormat pixelFormat);
@@ -66,9 +68,10 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 		void 				stop();
 
 		bool 				isFrameNew() const;
-		unsigned char * 	getPixels();
-        ofPixels&			getPixelsRef();
-        const ofPixels&     getPixelsRef() const;
+		ofPixels& 			getPixels();
+		const ofPixels&		getPixels() const;
+        OF_DEPRECATED_MSG("Use getPixels() instead", ofPixels&	getPixelsRef());
+        OF_DEPRECATED_MSG("Use getPixels() instead", const ofPixels&  getPixelsRef() const);
 		float 				getPosition() const;
 		float 				getSpeed() const;
 		float 				getDuration() const;
@@ -83,9 +86,11 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 
 		void 				setUseTexture(bool bUse);
 		bool 				isUsingTexture() const;
-		ofTexture &			getTextureReference();
+		ofTexture &			getTexture();
+		const ofTexture &	getTexture() const;
+		OF_DEPRECATED_MSG("Use getTexture",ofTexture &			getTextureReference());
+		OF_DEPRECATED_MSG("Use getTexture",const ofTexture &	getTextureReference() const);
 		vector<ofTexture> & getTexturePlanes();
-		const ofTexture &	getTextureReference() const;
 		const vector<ofTexture> & getTexturePlanes() const;
 		void 				draw(float x, float y, float w, float h) const;
 		void 				draw(float x, float y) const;
@@ -136,6 +141,7 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 		mutable int         width;
 
 	private:
+		void initDefaultPlayer();
 		shared_ptr<ofBaseVideoPlayer>		player;
 		
 		vector<ofTexture> tex;
