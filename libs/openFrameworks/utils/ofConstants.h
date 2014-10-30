@@ -315,7 +315,7 @@ typedef TESSindex ofIndexType;
         #define OF_VIDEO_PLAYER_ANDROID
     #elif defined(TARGET_OF_IOS)
         #define OF_VIDEO_PLAYER_IOS
-	#elif defined(TARGET_WIN32)
+	#elif defined(TARGET_WIN32) && !defined(__MINGW32__)
         #define OF_VIDEO_PLAYER_DIRECTSHOW
     #elif defined(TARGET_OSX)
         #ifdef TARGET_64_BIT
