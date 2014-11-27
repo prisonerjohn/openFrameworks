@@ -184,13 +184,13 @@ ofHttpResponse ofURLFileLoaderImpl::handleRequest(ofHttpRequest request) {
 		if(uri.getScheme()=="https"){
 			 //const Poco::Net::Context::Ptr context( new Poco::Net::Context( Poco::Net::Context::CLIENT_USE, "", "", "rootcert.pem" ) );
 			HTTPSClientSession * httpsSession = new HTTPSClientSession(uri.getHost(), uri.getPort());//,context);
-			httpsSession->setTimeout(Poco::Timespan(20,0));
+			httpsSession->setTimeout(Poco::Timespan(300,0));
 			httpsSession->sendRequest(req);
 			rs = &httpsSession->receiveResponse(res);
 			session = shared_ptr<HTTPSession>(httpsSession);
 		}else{
 			HTTPClientSession * httpSession = new HTTPClientSession(uri.getHost(), uri.getPort());
-			httpSession->setTimeout(Poco::Timespan(20,0));
+			httpSession->setTimeout(Poco::Timespan(300,0));
 			httpSession->sendRequest(req);
 			rs = &httpSession->receiveResponse(res);
 			session = shared_ptr<HTTPSession>(httpSession);
