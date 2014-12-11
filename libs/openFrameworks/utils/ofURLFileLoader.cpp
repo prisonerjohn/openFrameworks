@@ -50,6 +50,7 @@ public:
 	void remove(int id);
 	void clear();
     void stop();
+	ofHttpResponse handleRequest(ofHttpRequest request);
 
 protected:
 	// threading -----------------------------------------------
@@ -59,7 +60,6 @@ protected:
 
 private:
 	// perform the requests on the thread
-	ofHttpResponse handleRequest(ofHttpRequest request);
 
 	ofThreadChannel<ofHttpRequest> requests;
 	ofThreadChannel<ofHttpResponse> responses;
@@ -178,6 +178,9 @@ ofHttpResponse ofURLFileLoaderImpl::handleRequest(ofHttpRequest request) {
 		if (path.empty()) path = "/";
 
 		HTTPRequest req(HTTPRequest::HTTP_GET, path, HTTPMessage::HTTP_1_1);
+		for(map<string,string>::iterator it = request.headers.begin(); it!=request.headers.end(); it++){
+			req.add(it->first,it->second);
+		}
 		HTTPResponse res;
 		shared_ptr<HTTPSession> session;
 		istream * rs;
@@ -270,6 +273,10 @@ void ofURLFileLoader::clear(){
 
 void ofURLFileLoader::stop(){
 	impl->stop();
+}
+
+ofHttpResponse ofURLFileLoader::handleRequest(ofHttpRequest & request){
+	return impl->handleRequest(request);
 }
 
 static bool initialized = false;
