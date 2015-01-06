@@ -75,6 +75,11 @@ void ofxOscReceiver::setup( int listen_port, bool allowReuse )
 	#endif
 }
 
+void ofxOscReceiver::exit()
+{
+    shutdown();
+}
+
 void ofxOscReceiver::shutdown()
 {
 	if ( listen_socket )
