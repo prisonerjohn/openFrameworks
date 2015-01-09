@@ -503,7 +503,7 @@ float*  ofxCvFloatImage::getPixelsAsFloats(){
 		ofLogWarning("ofxCvFloatImage") << "getPixelsAsFloats(): image not allocated";
 	}
 	
-	return getFloatPixelsRef().getData();
+	return getFloatPixelsRef().getPixels();
 }
 //--------------------------------------------------------------------------------
 ofFloatPixels &	ofxCvFloatImage::getFloatPixelsRef(){
@@ -526,7 +526,7 @@ float*  ofxCvFloatImage::getRoiPixelsAsFloats(){
 		ofLogWarning("ofxCvFloatImage") << "getRoiPixelsAsFloats(): image not allocated";
 	}
 	
-	return getRoiFloatPixelsRef().getData();
+	return getRoiFloatPixelsRef().getPixels();
 }
 
 //--------------------------------------------------------------------------------

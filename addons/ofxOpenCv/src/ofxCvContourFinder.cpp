@@ -155,7 +155,7 @@ int ofxCvContourFinder::findContours( ofxCvGrayscaleImage&  input,
 }
 
 //--------------------------------------------------------------------------------
-void ofxCvContourFinder::draw( float x, float y, float w, float h ) const {
+void ofxCvContourFinder::draw( float x, float y, float w, float h ) {
 
     float scalex = 0.0f;
     float scaley = 0.0f;
@@ -173,14 +173,14 @@ void ofxCvContourFinder::draw( float x, float y, float w, float h ) const {
     ofPushStyle();
 	// ---------------------------- draw the bounding rectangle
 	ofSetHexColor(0xDD00CC);
-    ofPushMatrix();
-    ofTranslate( x, y, 0.0 );
-    ofScale( scalex, scaley, 0.0 );
+    glPushMatrix();
+    glTranslatef( x, y, 0.0 );
+    glScalef( scalex, scaley, 0.0 );
 
 	ofNoFill();
 	for( int i=0; i<(int)blobs.size(); i++ ) {
-		ofDrawRectangle( blobs[i].boundingRect.x, blobs[i].boundingRect.y,
-                        blobs[i].boundingRect.width, blobs[i].boundingRect.height );
+		ofRect( blobs[i].boundingRect.x, blobs[i].boundingRect.y,
+                blobs[i].boundingRect.width, blobs[i].boundingRect.height );
 	}
 
 	// ---------------------------- draw the blobs
@@ -195,18 +195,18 @@ void ofxCvContourFinder::draw( float x, float y, float w, float h ) const {
 		ofEndShape();
 
 	}
-	ofPopMatrix();
+	glPopMatrix();
 	ofPopStyle();
 }
 
 
 //----------------------------------------------------------
-void ofxCvContourFinder::draw(const ofPoint & point) const{
+void ofxCvContourFinder::draw(const ofPoint & point){
 	draw(point.x, point.y);
 }
 
 //----------------------------------------------------------
-void ofxCvContourFinder::draw(const ofRectangle & rect) const{
+void ofxCvContourFinder::draw(const ofRectangle & rect){
 	draw(rect.x, rect.y, rect.width, rect.height);
 }
 

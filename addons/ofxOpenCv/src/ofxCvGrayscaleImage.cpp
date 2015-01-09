@@ -117,8 +117,8 @@ void ofxCvGrayscaleImage::setRoiFromPixels( const unsigned char* _pixels, int w,
 }
 
 //--------------------------------------------------------------------------------
-void ofxCvGrayscaleImage::operator = ( const ofPixels & _pixels ) {
-    setFromPixels( _pixels);
+void ofxCvGrayscaleImage::operator = ( unsigned char* _pixels ) {
+    setFromPixels( _pixels, width, height );
 }
 
 //--------------------------------------------------------------------------------

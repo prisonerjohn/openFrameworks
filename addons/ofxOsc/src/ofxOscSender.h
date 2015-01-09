@@ -40,7 +40,6 @@ class UdpTransmitSocket;
 #include <string>
 #include "OscTypes.h"
 #include "OscOutboundPacketStream.h"
-#include "UdpSocket.h"
 
 #include "ofxOscBundle.h"
 #include "ofxOscMessage.h"
@@ -55,10 +54,10 @@ public:
 	~ofxOscSender();
 
 	/// send messages to hostname and port
-	void setup( std::string hostname, int port, bool enableBroadcast = true );
+	void setup( std::string hostname, int port );
 
 	/// send the given message
-	void sendMessage( ofxOscMessage& message, bool wrapInBundle = true );
+	void sendMessage( ofxOscMessage& message );
 	/// send the given bundle
 	void sendBundle( ofxOscBundle& bundle );
 	/// creates a message using an ofParameter
@@ -74,5 +73,5 @@ private:
 	void appendParameter( ofxOscBundle & bundle, const ofAbstractParameter & parameter, string address);
 	void appendParameter( ofxOscMessage & msg, const ofAbstractParameter & parameter, string address);
 
- 	UdpTransmitSocket * socket;
+	UdpTransmitSocket* socket;
 };

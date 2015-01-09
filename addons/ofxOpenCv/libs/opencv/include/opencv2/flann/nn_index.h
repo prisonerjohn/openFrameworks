@@ -28,8 +28,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *************************************************************************/
 
-#ifndef OPENCV_FLANN_NNINDEX_H
-#define OPENCV_FLANN_NNINDEX_H
+#ifndef FLANN_NNINDEX_H
+#define FLANN_NNINDEX_H
 
 #include <string>
 
@@ -114,12 +114,12 @@ public:
         int* indices_ptr = NULL;
         DistanceType* dists_ptr = NULL;
         if (indices.cols > 0) {
-            n = (int)indices.cols;
+            n = indices.cols;
             indices_ptr = indices[0];
             dists_ptr = dists[0];
         }
 
-        RadiusUniqueResultSet<DistanceType> resultSet((DistanceType)radius);
+        RadiusUniqueResultSet<DistanceType> resultSet(radius);
         resultSet.clear();
         findNeighbors(resultSet, query[0], params);
         if (n>0) {
@@ -127,7 +127,7 @@ public:
             else resultSet.copy(indices_ptr, dists_ptr, n);
         }
 
-        return (int)resultSet.size();
+        return resultSet.size();
     }
 
     /**
@@ -176,4 +176,4 @@ public:
 
 }
 
-#endif //OPENCV_FLANN_NNINDEX_H
+#endif //FLANN_NNINDEX_H

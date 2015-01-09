@@ -28,8 +28,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *************************************************************************/
 
-#ifndef OPENCV_FLANN_RESULTSET_H
-#define OPENCV_FLANN_RESULTSET_H
+#ifndef FLANN_RESULTSET_H
+#define FLANN_RESULTSET_H
 
 #include <algorithm>
 #include <cstring>
@@ -539,4 +539,5 @@ private:
 };
 }
 
-#endif //OPENCV_FLANN_RESULTSET_H
+#endif //FLANN_RESULTSET_H
+

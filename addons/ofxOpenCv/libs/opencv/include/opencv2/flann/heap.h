@@ -67,12 +67,12 @@ public:
      * Constructor.
      *
      * Params:
-     *     sz = heap size
+     *     size = heap size
      */
 
-    Heap(int sz)
+    Heap(int size)
     {
-        length = sz;
+        length = size;
         heap.reserve(length);
         count = 0;
     }

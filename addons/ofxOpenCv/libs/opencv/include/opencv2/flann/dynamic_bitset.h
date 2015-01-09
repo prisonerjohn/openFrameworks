@@ -35,9 +35,6 @@
 #ifndef OPENCV_FLANN_DYNAMIC_BITSET_H_
 #define OPENCV_FLANN_DYNAMIC_BITSET_H_
 
-#ifndef FLANN_USE_BOOST
-#  define FLANN_USE_BOOST 0
-#endif
 //#define FLANN_USE_BOOST 1
 #if FLANN_USE_BOOST
 #include <boost/dynamic_bitset.hpp>
@@ -47,8 +44,6 @@ typedef boost::dynamic_bitset<> DynamicBitset;
 #include <limits.h>
 
 #include "dist.h"
-
-namespace cvflann {
 
 /** Class re-implementing the boost version of it
  * This helps not depending on boost, it also does not do the bound checks
@@ -66,9 +61,9 @@ public:
     /** @param only constructor we use in our code
      * @param the size of the bitset (in bits)
      */
-    DynamicBitset(size_t sz)
+    DynamicBitset(size_t size)
     {
-        resize(sz);
+        resize(size);
         reset();
     }
 
@@ -116,10 +111,10 @@ public:
     /** @param resize the bitset so that it contains at least size bits
      * @param size
      */
-    void resize(size_t sz)
+    void resize(size_t size)
     {
-        size_ = sz;
-        bitset_.resize(sz / cell_bit_size_ + 1);
+        size_ = size;
+        bitset_.resize(size / cell_bit_size_ + 1);
     }
 
     /** @param set a bit to true
@@ -151,8 +146,6 @@ private:
     size_t size_;
     static const unsigned int cell_bit_size_ = CHAR_BIT * sizeof(size_t);
 };
-
-} // namespace cvflann
 
 #endif
 

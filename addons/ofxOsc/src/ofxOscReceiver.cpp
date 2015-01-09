@@ -39,12 +39,8 @@ ofxOscReceiver::ofxOscReceiver()
 	listen_socket = NULL;
 }
 
-void ofxOscReceiver::setup( int listen_port, bool allowReuse )
+void ofxOscReceiver::setup( int listen_port )
 {
-    if( UdpSocket::GetUdpBufferSize() == 0 ){
-        UdpSocket::SetUdpBufferSize(65535);
-    }
-    
 	// if we're already running, shutdown before running again
 	if ( listen_socket )
 		shutdown();
@@ -58,7 +54,7 @@ void ofxOscReceiver::setup( int listen_port, bool allowReuse )
 	
 	// create socket
 	socketHasShutdown = false;
-	listen_socket = new UdpListeningReceiveSocket( IpEndpointName( IpEndpointName::ANY_ADDRESS, listen_port ), this, allowReuse );
+	listen_socket = new UdpListeningReceiveSocket( IpEndpointName( IpEndpointName::ANY_ADDRESS, listen_port ), this );
 
 	// start thread
 	#ifdef TARGET_WIN32
@@ -73,11 +69,6 @@ void ofxOscReceiver::setup( int listen_port, bool allowReuse )
 	#else
 	pthread_create( &thread, NULL, &ofxOscReceiver::startThread, (void*)this );
 	#endif
-}
-
-void ofxOscReceiver::exit()
-{
-    shutdown();
 }
 
 void ofxOscReceiver::shutdown()
@@ -141,13 +132,12 @@ ofxOscReceiver::startThread( void* receiverInstance )
 
 void ofxOscReceiver::ProcessMessage( const osc::ReceivedMessage &m, const IpEndpointName& remoteEndpoint )
 {
-
 	// convert the message to an ofxOscMessage
 	ofxOscMessage* ofMessage = new ofxOscMessage();
 
 	// set the address
 	ofMessage->setAddress( m.AddressPattern() );
-    
+
 	// set the sender ip/host
 	char endpoint_host[ IpEndpointName::ADDRESS_STRING_LENGTH ];
 	remoteEndpoint.AddressAsString( endpoint_host );
@@ -166,13 +156,7 @@ void ofxOscReceiver::ProcessMessage( const osc::ReceivedMessage &m, const IpEndp
 			ofMessage->addFloatArg( arg->AsFloatUnchecked() );
 		else if ( arg->IsString() )
 			ofMessage->addStringArg( arg->AsStringUnchecked() );
-		else if ( arg->IsBlob() ){
-            const char * dataPtr;
-            osc::osc_bundle_element_size_t len = 0;
-            arg->AsBlobUnchecked((const void*&)dataPtr, len);
-            ofBuffer buffer(dataPtr, len);
-			ofMessage->addBlobArg( buffer );
-		}else
+		else
 		{
 			ofLogError("ofxOscReceiver") << "ProcessMessage: argument in message " << m.AddressPattern() << " is not an int, float, or string";
 		}
@@ -240,36 +224,30 @@ bool ofxOscReceiver::getNextMessage( ofxOscMessage* message )
 	return true;
 }
 
-
 bool ofxOscReceiver::getParameter(ofAbstractParameter & parameter){
 	ofxOscMessage msg;
 	if ( messages.size() == 0 ) return false;
 	while(hasWaitingMessages()){
 		ofAbstractParameter * p = &parameter;
-        
-        getNextMessage(&msg);
-        vector<string> address = ofSplitString(msg.getAddress(),"/",true);
-                
-        for(unsigned int i=0;i<address.size();i++){
-            
-            if(p) {
-                if(address[i]==p->getEscapedName()){
-                    if(p->type()==typeid(ofParameterGroup).name()){
-                        if(address.size()>=i+1){
-                            p = &static_cast<ofParameterGroup*>(p)->get(address[i+1]);
-                        }
-                    }else if(p->type()==typeid(ofParameter<int>).name() && msg.getArgType(0)==OFXOSC_TYPE_INT32){
-                        p->cast<int>() = msg.getArgAsInt32(0);
-                    }else if(p->type()==typeid(ofParameter<float>).name() && msg.getArgType(0)==OFXOSC_TYPE_FLOAT){
-                        p->cast<float>() = msg.getArgAsFloat(0);
-                    }else if(p->type()==typeid(ofParameter<bool>).name() && msg.getArgType(0)==OFXOSC_TYPE_INT32){
-                        p->cast<bool>() = msg.getArgAsInt32(0);
-                    }else if(msg.getArgType(0)==OFXOSC_TYPE_STRING){
-                        p->fromString(msg.getArgAsString(0));
-                    }
-                }
-            }
-        }
+		getNextMessage(&msg);
+		vector<string> address = ofSplitString(msg.getAddress(),"/",true);
+		for(int i=0;i<address.size();i++){
+			if(address[i]==p->getName()){
+				if(p->type()==typeid(ofParameterGroup).name()){
+					if(address.size()>=i+1){
+						p = &static_cast<ofParameterGroup*>(p)->get(address[i+1]);
+					}
+				}else if(p->type()==typeid(ofParameter<int>).name() && msg.getArgType(0)==OFXOSC_TYPE_INT32){
+					p->cast<int>() = msg.getArgAsInt32(0);
+				}else if(p->type()==typeid(ofParameter<float>).name() && msg.getArgType(0)==OFXOSC_TYPE_FLOAT){
+					p->cast<float>() = msg.getArgAsFloat(0);
+				}else if(p->type()==typeid(ofParameter<bool>).name() && msg.getArgType(0)==OFXOSC_TYPE_INT32){
+					p->cast<bool>() = msg.getArgAsInt32(0);
+				}else if(msg.getArgType(0)==OFXOSC_TYPE_STRING){
+					p->fromString(msg.getArgAsString(0));
+				}
+			}
+		}
 	}
 	return true;
 }

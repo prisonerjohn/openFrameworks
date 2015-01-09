@@ -47,16 +47,12 @@ ofxOscSender::~ofxOscSender()
 		shutdown();
 }
 
-void ofxOscSender::setup( std::string hostname, int port, bool enableBroadcast )
+void ofxOscSender::setup( std::string hostname, int port )
 {
-    if( UdpSocket::GetUdpBufferSize() == 0 ){
-        UdpSocket::SetUdpBufferSize(65535);
-    }
-
 	if ( socket )
 		shutdown();
 	
-    socket = new UdpTransmitSocket(IpEndpointName( hostname.c_str(), port), enableBroadcast);
+	socket = new UdpTransmitSocket( IpEndpointName( hostname.c_str(), port ) );
 }
 
 void ofxOscSender::shutdown()
@@ -68,9 +64,7 @@ void ofxOscSender::shutdown()
 
 void ofxOscSender::sendBundle( ofxOscBundle& bundle )
 {
-    //setting this much larger as it gets trimmed down to the size its using before being sent.
-    //TODO: much better if we could make this dynamic? Maybe have ofxOscBundle return its size?
-	static const int OUTPUT_BUFFER_SIZE = 327680;
+	static const size_t OUTPUT_BUFFER_SIZE = 32768;
 	char buffer[OUTPUT_BUFFER_SIZE];
 	osc::OutboundPacketStream p(buffer, OUTPUT_BUFFER_SIZE );
 
@@ -80,24 +74,21 @@ void ofxOscSender::sendBundle( ofxOscBundle& bundle )
 	socket->Send( p.Data(), p.Size() );
 }
 
-void ofxOscSender::sendMessage( ofxOscMessage& message, bool wrapInBundle )
+void ofxOscSender::sendMessage( ofxOscMessage& message )
 {
-    //setting this much larger as it gets trimmed down to the size its using before being sent.
-    //TODO: much better if we could make this dynamic? Maybe have ofxOscMessage return its size?
-    static const int OUTPUT_BUFFER_SIZE = 327680;
+	static const size_t OUTPUT_BUFFER_SIZE = 16384;
 	char buffer[OUTPUT_BUFFER_SIZE];
     osc::OutboundPacketStream p( buffer, OUTPUT_BUFFER_SIZE );
 
 	// serialise the message
-	if(wrapInBundle) p << osc::BeginBundleImmediate;
+	p << osc::BeginBundleImmediate;
 	appendMessage( message, p );
-	if(wrapInBundle) p << osc::EndBundle;
+	p << osc::EndBundle;
 
 	socket->Send( p.Data(), p.Size() );
 }
 
 void ofxOscSender::sendParameter( const ofAbstractParameter & parameter){
-	if(!parameter.isSerializable()) return;
 	if(parameter.type()==typeid(ofParameterGroup).name()){
 		string address = "/";
 		const vector<string> hierarchy = parameter.getGroupHierarchyNames();
@@ -116,7 +107,7 @@ void ofxOscSender::sendParameter( const ofAbstractParameter & parameter){
 		if(address.length()) address += "/";
 		ofxOscMessage msg;
 		appendParameter(msg,parameter,address);
-		sendMessage(msg, false);
+		sendMessage(msg);
 	}
 }
 
@@ -127,22 +118,18 @@ void ofxOscSender::appendParameter( ofxOscBundle & _bundle, const ofAbstractPara
 		const ofParameterGroup & group = static_cast<const ofParameterGroup &>(parameter);
 		for(int i=0;i<group.size();i++){
 			const ofAbstractParameter & p = group[i];
-			if(p.isSerializable()){
-				appendParameter(bundle,p,address+group.getEscapedName()+"/");
-			}
+			appendParameter(bundle,p,address+group.getName()+"/");
 		}
 		_bundle.addBundle(bundle);
 	}else{
-		if(parameter.isSerializable()){
-			ofxOscMessage msg;
-			appendParameter(msg,parameter,address);
-			_bundle.addMessage(msg);
-		}
+		ofxOscMessage msg;
+		appendParameter(msg,parameter,address);
+		_bundle.addMessage(msg);
 	}
 }
 
 void ofxOscSender::appendParameter( ofxOscMessage & msg, const ofAbstractParameter & parameter, string address){
-	msg.setAddress(address+parameter.getEscapedName());
+	msg.setAddress(address+parameter.getName());
 	if(parameter.type()==typeid(ofParameter<int>).name()){
 		msg.addIntArg(parameter.cast<int>());
 	}else if(parameter.type()==typeid(ofParameter<float>).name()){
@@ -182,11 +169,7 @@ void ofxOscSender::appendMessage( ofxOscMessage& message, osc::OutboundPacketStr
 			p << message.getArgAsFloat( i );
 		else if ( message.getArgType( i ) == OFXOSC_TYPE_STRING )
 			p << message.getArgAsString( i ).c_str();
-        else if ( message.getArgType( i ) == OFXOSC_TYPE_BLOB ){
-            ofBuffer buff = message.getArgAsBlob(i);
-            osc::Blob b(buff.getData(), (unsigned long)buff.size());
-            p << b; 
-		}else
+		else
 		{
 			ofLogError("ofxOscSender") << "appendMessage(): bad argument type " << message.getArgType( i );
 			assert( false );

@@ -92,9 +92,9 @@ public:
     /**
         Default constructor. Initializes a new pool.
      */
-    PooledAllocator(int blockSize = BLOCKSIZE)
+    PooledAllocator(int blocksize = BLOCKSIZE)
     {
-        blocksize = blockSize;
+        this->blocksize = blocksize;
         remaining = 0;
         base = NULL;
 
@@ -122,7 +122,7 @@ public:
      */
     void* allocateMemory(int size)
     {
-        int blockSize;
+        int blocksize;
 
         /* Round size up to a multiple of wordsize.  The following expression
             only works for WORDSIZE that is a power of 2, by masking last bits of
@@ -138,11 +138,11 @@ public:
             wastedMemory += remaining;
 
             /* Allocate new storage. */
-            blockSize = (size + sizeof(void*) + (WORDSIZE-1) > BLOCKSIZE) ?
+            blocksize = (size + sizeof(void*) + (WORDSIZE-1) > BLOCKSIZE) ?
                         size + sizeof(void*) + (WORDSIZE-1) : BLOCKSIZE;
 
             // use the standard C malloc to allocate memory
-            void* m = ::malloc(blockSize);
+            void* m = ::malloc(blocksize);
             if (!m) {
                 fprintf(stderr,"Failed to allocate memory.\n");
                 return NULL;
@@ -155,7 +155,7 @@ public:
             int shift = 0;
             //int shift = (WORDSIZE - ( (((size_t)m) + sizeof(void*)) & (WORDSIZE-1))) & (WORDSIZE-1);
 
-            remaining = blockSize - sizeof(void*) - shift;
+            remaining = blocksize - sizeof(void*) - shift;
             loc = ((char*)m + sizeof(void*) + shift);
         }
         void* rloc = loc;

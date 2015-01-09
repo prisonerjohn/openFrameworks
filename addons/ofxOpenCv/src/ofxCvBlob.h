@@ -45,6 +45,6 @@ class ofxCvBlob {
             }
             ofEndShape(true);
             ofSetHexColor(0xff0099);
-            ofDrawRectangle(x + boundingRect.x, y + boundingRect.y, boundingRect.width, boundingRect.height);
+            ofRect(x + boundingRect.x, y + boundingRect.y, boundingRect.width, boundingRect.height);
         }
 };

@@ -67,6 +67,8 @@ template<>
 hid_t get_hdf5_type<float>() { return H5T_NATIVE_FLOAT; }
 template<>
 hid_t get_hdf5_type<double>() { return H5T_NATIVE_DOUBLE; }
+template<>
+hid_t get_hdf5_type<long double>() { return H5T_NATIVE_LDOUBLE; }
 }
 
 

@@ -71,7 +71,6 @@ public:
 	uint64_t getArgAsInt64( int index ) const;
 	float getArgAsFloat( int index ) const;
 	string getArgAsString( int index ) const;
-	ofBuffer getArgAsBlob( int index ) const;
 
 	/// message construction
 	void setAddress( string _address ) { address = _address; };
@@ -81,7 +80,7 @@ public:
 	void addInt64Arg( uint64_t argument );
 	void addFloatArg( float argument );
 	void addStringArg( string argument );
-	void addBlobArg( ofBuffer argument );
+
 
 private:
 
