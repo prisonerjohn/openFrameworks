@@ -921,9 +921,11 @@ void ofAppGLFWWindow::error_cb(int errorCode, const char* errorDescription){
 }
 
 //------------------------------------------------------------
-void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int keycode, int scancode, int action, int mods) {
-	int key;
-	switch (keycode) {
+void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int key, int scancode, int action, int mods) {
+
+	ofLogVerbose("ofAppGLFWWindow") << "key: " << key << " state: " << action;
+
+	switch (key) {
 		case GLFW_KEY_ESCAPE:
 			key = OF_KEY_ESC;
 			break;
@@ -1030,14 +1032,22 @@ void ofAppGLFWWindow::keyboard_cb(GLFWwindow* windowP_, int keycode, int scancod
 			key = OF_KEY_TAB;
 			break;   
 		default:
-			key = keycode;
 			break;
 	}
 
+	//GLFW defaults to uppercase - OF users are used to lowercase
+    //we look and see if shift is being held to toggle upper/lowecase 
+	if( key >= 65 && key <= 90 && !ofGetKeyPressed(OF_KEY_SHIFT) ){
+		key += 32;
+	}
+
 	if(action == GLFW_PRESS || action == GLFW_REPEAT){
-		ofNotifyKeyPressed(key,keycode,scancode,-1);
+		ofNotifyKeyPressed(key);
+		if (key == OF_KEY_ESC){				// "escape"
+			exitApp();
+		}
 	}else if (action == GLFW_RELEASE){
-		ofNotifyKeyReleased(key,keycode,scancode,-1);
+		ofNotifyKeyReleased(key);
 	}
 }
 
