@@ -59,6 +59,11 @@ void ofxOscSender::setup( std::string hostname, int port, bool enableBroadcast )
     socket = new UdpTransmitSocket(IpEndpointName( hostname.c_str(), port), enableBroadcast);
 }
 
+void ofxOscSender::exit()
+{
+    shutdown();
+}
+
 void ofxOscSender::shutdown()
 {
 	if ( socket )

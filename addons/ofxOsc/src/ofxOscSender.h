@@ -56,6 +56,7 @@ public:
 
 	/// send messages to hostname and port
 	void setup( std::string hostname, int port, bool enableBroadcast = true );
+    void exit();
 
 	/// send the given message
 	void sendMessage( ofxOscMessage& message, bool wrapInBundle = true );
