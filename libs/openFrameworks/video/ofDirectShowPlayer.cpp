@@ -684,7 +684,7 @@ class DirectShowVideo : public ISampleGrabberCB{
 			if (FAILED(hr)){			
 
 			}
-			// check to make sure this is the audio pin
+			// check to make sure Ethis is the audio pin
 			// check the mt
 
 			//
@@ -767,6 +767,9 @@ class DirectShowVideo : public ISampleGrabberCB{
 				//printf("Event code: %#04x\n Params: %d, %d\n", eventCode, ptrParam1, ptrParam2);
 				m_pEvent->FreeEventParams(eventCode, ptrParam1, ptrParam2);
 			}
+		}
+		if(!bEndReached){
+			updatePlayState();
 		}
 	}
 
@@ -946,6 +949,7 @@ class DirectShowVideo : public ISampleGrabberCB{
 		if( bVideoOpened ){
 			FILTER_STATE fs;
 			hr = m_pControl->GetState(4000, (OAFilterState*)&fs);
+		
 			if(hr==S_OK){
 				if( fs == State_Running ){
 					bPlaying = true; 
@@ -1177,6 +1181,7 @@ void ofDirectShowPlayer::update(){
 
 void ofDirectShowPlayer::play(){
 	if( player && player->isLoaded() ){
+		
 		player->play();
 	}
 }
