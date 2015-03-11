@@ -905,8 +905,10 @@ ofTexture ofxAssimpModelLoader::getTextureForMesh(int i){
             return *tex;
         }
 	}
-    ofLogError("ofxAssimpModelLoader") << "getTextureForMesh(): mesh id: " << i
-			<< "out of range for total num meshes: " << scene->mNumMeshes;
+	if(scene != NULL){
+	   ofLogError("ofxAssimpModelLoader") << "getTextureForMesh(): mesh id: " << i
+				<< "out of range for total num meshes: " << scene->mNumMeshes;
+	}
     return ofTexture();
 }
 

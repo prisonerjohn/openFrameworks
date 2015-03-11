@@ -18,10 +18,9 @@
 class ofBaseApp;
 
 class ofAppGLFWWindow : public ofAppBaseWindow {
-
+  public:
+	 
 	static GLFWwindow* windowP;
-
-public:
 
 	ofAppGLFWWindow();
 	~ofAppGLFWWindow(){}
@@ -40,6 +39,7 @@ public:
 	bool		isWindowResizeable();
 	void		iconify(bool bIconify);
     void        setMultiDisplayFullscreen(bool bMultiFullscreen); //note this just enables the mode, you have to toggle fullscreen to activate it.
+	bool		isCursorAboveWindow();
 
 
     // this functions are only meant to be called from inside OF don't call them from your code
@@ -47,7 +47,6 @@ public:
 	void setupOpenGL(int w, int h, int screenMode);
 	void initializeWindow();
 	void runAppViaInfiniteLoop(ofBaseApp * appPtr);
-
 
 	void hideCursor();
 	void showCursor();
@@ -113,6 +112,7 @@ private:
 	static void 	resize_cb(GLFWwindow* windowP_, int w, int h);
 	static void 	exit_cb(GLFWwindow* windowP_);
 	static void		scroll_cb(GLFWwindow* windowP_, double x, double y);
+	static void		enter_cb(GLFWwindow* windowP_, int entered);
 	static void 	drop_cb(GLFWwindow* windowP_, const char* dropString);
 	static void		error_cb(int errorCode, const char* errorDescription);
 	static void 	exitApp();
@@ -147,7 +147,8 @@ private:
 	int 			nFramesSinceWindowResized;
 	bool			bDoubleBuffered;
     bool            bMultiWindowFullscreen; 
-    
+    bool			bCursorAboveWindow;
+
 	int				getCurrentMonitor();
 	
 	static ofAppGLFWWindow	* instance;

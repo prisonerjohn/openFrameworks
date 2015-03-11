@@ -30,6 +30,11 @@
 	#define OF_VID_PLAYER_TYPE ofDirectShowPlayer
 #endif
 
+#ifdef OF_VIDEO_PLAYER_WMFPLAYER
+	#include "ofxWMFVideoPlayer.h"
+	#define OF_VID_PLAYER_TYPE ofxWMFVideoPlayer
+#endif
+
 #ifdef OF_VIDEO_PLAYER_IOS
 	#include "ofxiOSVideoPlayer.h"
 	#define OF_VID_PLAYER_TYPE ofxiOSVideoPlayer

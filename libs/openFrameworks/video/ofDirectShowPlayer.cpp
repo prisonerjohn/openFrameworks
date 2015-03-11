@@ -498,7 +498,7 @@ class DirectShowVideo : public ISampleGrabberCB{
 			return false;
 		}
 
-		m_pGrabber->SetCallback(this, 0);
+		hr = m_pGrabber->SetCallback(this, 0);
 		if (FAILED(hr)){
 			tearDown(); 
 			return false;
@@ -524,21 +524,21 @@ class DirectShowVideo : public ISampleGrabberCB{
 		std::wstring filePathW = std::wstring(path.begin(), path.end());
 
 		//this is the easier way to connect the graph, but we have to remove the video window manually
-	    hr = m_pGraph->RenderFile(filePathW.c_str(), NULL);
+	    //hr = m_pGraph->RenderFile(filePathW.c_str(), NULL);
 
 		//this is the more manual way to do it - its a pain though because the audio won't be connected by default
-		/*hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source", &m_pSourceFile); 
+		hr = m_pGraph->AddSourceFilter(filePathW.c_str(), L"Source", &m_pSourceFile); 
 		if (FAILED(hr)){
 			printf("unable to AddSourceFilter\n");
 			tearDown(); 
 			return false;
-		}*/
-		//hr = ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF);
-		//if (FAILED(hr)){
-		//	printf("unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF)\n");
-		//	tearDown(); 
-		//	return false;
-		//}
+		}
+		hr = ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF);
+		if (FAILED(hr)){
+			printf("unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pGrabberF)\n");
+			tearDown(); 
+			return false;
+		}
 
 		//printf("step 7\n"); 
 		if (SUCCEEDED(hr)){
@@ -567,24 +567,24 @@ class DirectShowVideo : public ISampleGrabberCB{
 				return false;
 			}		
 
-			hr = m_pGraph->AddFilter(m_pNullRenderer, L"Render");
+			hr = m_pGraph->AddFilter(m_pNullRenderer, L"Video Render");
 			if (FAILED(hr)){
 				printf("unable to add null renderer\n");
 				tearDown(); 
 				return false;
 			}
 			
-			//hr = ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer);
-			//if (FAILED(hr)){
-			//	printf("unable to ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer)\n");
-			//	tearDown(); 
-			//	return false;
-			//}
+			hr = ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer);
+			if (FAILED(hr)){
+				printf("unable to ConnectFilters(m_pGraph, m_pGrabberF, m_pNullRenderer)\n");
+				tearDown(); 
+				return false;
+			}
 	
 			AM_MEDIA_TYPE mt;
 			ZeroMemory(&mt,sizeof(AM_MEDIA_TYPE));
 
-			m_pGrabber->GetConnectedMediaType(&mt);
+			hr = m_pGrabber->GetConnectedMediaType(&mt);
 			if (FAILED(hr)){
 				printf("unable to call GetConnectedMediaType\n");
 				tearDown(); 
@@ -599,7 +599,7 @@ class DirectShowVideo : public ISampleGrabberCB{
 			videoSize = width * height * 3;
 			//printf("video dimensions are %i %i\n", width, height); 
 
-			//we need to manually change the output from the renderer window to the null renderer
+/*			//we need to manually change the output from the renderer window to the null renderer
 			IBaseFilter * m_pVideoRenderer;
 			IPin* pinIn = 0;
 			IPin* pinOut = 0;
@@ -654,10 +654,58 @@ class DirectShowVideo : public ISampleGrabberCB{
 				tearDown();
 				return false;
 			}
-
+			*/
 			//printf("step 8\n"); 
 			// Run the graph.
 		
+			// add audio filter and connect
+			//hr = CoCreateInstance(CLSID_DSoundRender, NULL, CLSCTX_INPROC_SERVER, IID_IBasicAudio, (void**)(&m_pAudioRenderer));
+			//if (FAILED(hr)){
+			//	printf("unable to CREATE AUDIO\n");
+			//	tearDown(); 
+			//	return false;
+			//}
+			
+			//hr = m_pGraph->AddFilter(m_pAudioRenderer, L"audio");
+			////IBaseFilter* pAudio = nullptr;
+			////hr = m_pAudio->QueryInterface(__uuidof(IBaseFilter), (void**)&pAudio);//leak leak
+			//if(FAILED(hr))
+			//{
+			//}
+
+			//hr = ConnectFilters(m_pGraph, m_pSourceFile, m_pAudioRenderer);
+			//if (FAILED(hr)){
+			//	printf("warning unable to ConnectFilters(m_pGraph, m_pSourceFile, m_pNullRenderer), but that is OK\n");
+			//	hr = S_OK;
+			//}
+
+			IPin *pOut = 0;   
+			hr = GetUnconnectedPin(m_pSourceFile, PINDIR_OUTPUT, &pOut);
+			if (FAILED(hr)){			
+
+			}
+			// check to make sure Ethis is the audio pin
+			// check the mt
+
+			//
+			hr = m_pGraph->Render(pOut);
+			if (FAILED(hr)){			
+
+			}
+
+
+
+			//IPin *pIn = 0;   
+			//hr = GetUnconnectedPin(m_pAudioRenderer, PINDIR_INPUT, &pIn);
+			//if (FAILED(hr)){			
+
+			//}
+
+			//hr = pIn->ConnectedTo(&pOut);
+			//if (FAILED(hr)){			
+
+			//}
+
 			//SaveGraphFile(m_pGraph, L"test2.grf");
 			hr = m_pControl->Run();	
 			//SaveGraphFile(m_pGraph, L"test3.grf");
@@ -719,6 +767,9 @@ class DirectShowVideo : public ISampleGrabberCB{
 				//printf("Event code: %#04x\n Params: %d, %d\n", eventCode, ptrParam1, ptrParam2);
 				m_pEvent->FreeEventParams(eventCode, ptrParam1, ptrParam2);
 			}
+		}
+		if(!bEndReached){
+			updatePlayState();
 		}
 	}
 
@@ -898,6 +949,7 @@ class DirectShowVideo : public ISampleGrabberCB{
 		if( bVideoOpened ){
 			FILTER_STATE fs;
 			hr = m_pControl->GetState(4000, (OAFilterState*)&fs);
+		
 			if(hr==S_OK){
 				if( fs == State_Running ){
 					bPlaying = true; 
@@ -1051,6 +1103,7 @@ class DirectShowVideo : public ISampleGrabberCB{
 	IBaseFilter * m_pGrabberF; 
 	IBasicVideo * m_pBasicVideo;
 	IBaseFilter * m_pNullRenderer;
+	IBaseFilter * m_pAudioRenderer;
 
 	REFERENCE_TIME timeNow;				// Used for FF & REW of movie, current time
 	LONGLONG lPositionInSecs;		// Time in  seconds
@@ -1128,6 +1181,7 @@ void ofDirectShowPlayer::update(){
 
 void ofDirectShowPlayer::play(){
 	if( player && player->isLoaded() ){
+		
 		player->play();
 	}
 }
@@ -1235,7 +1289,7 @@ void ofDirectShowPlayer::setLoopState(ofLoopType state){
 			player->setLoop(false);
 		}
 		else if( state == OF_LOOP_NORMAL ){
-			player->setLoop(false);
+			player->setLoop(true);
 		}else{
 			ofLogError("ofDirectShowPlayer") << " cannot set loop of type palindrome " << endl;
 		}

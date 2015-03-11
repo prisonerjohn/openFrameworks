@@ -186,6 +186,7 @@ int ofGetGLFormatFromInternal(int glInternalFormat){
 #ifndef TARGET_OPENGLES
 			case GL_R8:
 			case GL_R16:
+			case GL_R16UI:
 			case GL_R32F:
 				return GL_RED;
 
@@ -489,6 +490,7 @@ int ofGetNumChannelsFromGLFormat(int glFormat){
 		return 3;
 	case GL_RGBA:
 		return 4;
+	case GL_LUMINANCE_INTEGER_EXT:
 	case GL_LUMINANCE:
 		return 1;
 	case GL_LUMINANCE_ALPHA:

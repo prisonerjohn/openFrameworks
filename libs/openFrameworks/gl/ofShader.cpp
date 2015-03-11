@@ -871,4 +871,3 @@ string ofShader::nameForType(GLenum type) {
 	}
 }
 
-
