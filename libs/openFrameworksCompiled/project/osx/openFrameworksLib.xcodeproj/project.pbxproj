@@ -463,10 +463,6 @@
 				6447BB501917D95500AA9CCF /* ofAVFMovieRenderer.m */,
 				6447BB511917D95500AA9CCF /* ofAVFoundationPlayer.h */,
 				6447BB521917D95500AA9CCF /* ofAVFoundationPlayer.mm */,
-				E4B27ADB10CBE92A00536013 /* ofVideoGrabber.cpp */,
-				E4B27ADC10CBE92A00536013 /* ofVideoGrabber.h */,
-				E4B27ADD10CBE92A00536013 /* ofVideoPlayer.cpp */,
-				E4B27ADE10CBE92A00536013 /* ofVideoPlayer.h */,
 				E4B5AE1612D94F9B00BA355D /* ofQuickTimeGrabber.cpp */,
 				E4B5AE1712D94F9B00BA355D /* ofQuickTimeGrabber.h */,
 				E42732AD15F10E7A00BBC533 /* ofQuickTimePlayer.cpp */,
@@ -939,7 +935,7 @@
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../lib/osx/";
 				CONFIGURATION_TEMP_DIR = "$(SRCROOT)/../../lib/osx/build/debug/";
 				OBJROOT = "$(SRCROOT)/../../lib/osx/build/debug/";
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -951,7 +947,7 @@
 				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/../../lib/osx/";
 				CONFIGURATION_TEMP_DIR = "$(SRCROOT)/../../lib/osx/build/release/";
 				OBJROOT = "$(SRCROOT)/../../lib/osx/build/release";
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.9;
 			};
 			name = Release;
 		};
