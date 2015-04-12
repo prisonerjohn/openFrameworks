@@ -39,13 +39,9 @@ ofxOscReceiver::ofxOscReceiver()
 	listen_socket = NULL;
 }
 
-void ofxOscReceiver::setup( int listen_port, bool allowReuse )
+void ofxOscReceiver::setup( int listen_port )
 {
-    if( UdpSocket::GetUdpBufferSize() == 0 ){
-        UdpSocket::SetUdpBufferSize(65535);
-    }
-    
-	// if we're already running, shutdown before running again
+    // if we're already running, shutdown before running again
 	if ( listen_socket )
 		shutdown();
 	
@@ -58,7 +54,7 @@ void ofxOscReceiver::setup( int listen_port, bool allowReuse )
 	
 	// create socket
 	socketHasShutdown = false;
-	listen_socket = new UdpListeningReceiveSocket( IpEndpointName( IpEndpointName::ANY_ADDRESS, listen_port ), this, allowReuse );
+	listen_socket = new UdpListeningReceiveSocket( IpEndpointName( IpEndpointName::ANY_ADDRESS, listen_port ), this );
 
 	// start thread
 	#ifdef TARGET_WIN32

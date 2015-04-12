@@ -47,16 +47,12 @@ ofxOscSender::~ofxOscSender()
 		shutdown();
 }
 
-void ofxOscSender::setup( std::string hostname, int port, bool enableBroadcast )
+void ofxOscSender::setup( std::string hostname, int port )
 {
-    if( UdpSocket::GetUdpBufferSize() == 0 ){
-        UdpSocket::SetUdpBufferSize(65535);
-    }
-
 	if ( socket )
 		shutdown();
 	
-    socket = new UdpTransmitSocket(IpEndpointName( hostname.c_str(), port), enableBroadcast);
+    socket = new UdpTransmitSocket(IpEndpointName( hostname.c_str(), port));
 }
 
 void ofxOscSender::shutdown()

@@ -89,34 +89,6 @@ public:
 	UdpSocket();
 	virtual ~UdpSocket();
 
-	// The socket is created in an unbound, unconnected state
-	// such a socket can only be used to send to an arbitrary
-	// address using SendTo(). To use Send() you need to first
-	// connect to a remote endpoint using Connect(). To use
-	// ReceiveFrom you need to first bind to a local endpoint
-	// using Bind().
-
-	// Retrieve the local endpoint name when sending to 'to'
-	IpEndpointName LocalEndpointFor( const IpEndpointName& remoteEndpoint ) const;
-
-	// Connect to a remote endpoint which is used as the target
-	// for calls to Send()
-	void Connect( const IpEndpointName& remoteEndpoint, bool enableBroadcast = false );
-	void Send( const char *data, std::size_t size );
-    void SendTo( const IpEndpointName& remoteEndpoint, const char *data, std::size_t size );
-
-
-	// Bind a local endpoint to receive incoming data. Endpoint
-	// can be 'any' for the system to choose an endpoint
-	void Bind( const IpEndpointName& localEndpoint, bool allowReuse = false );
-	bool IsBound() const;
-
-    std::size_t ReceiveFrom( IpEndpointName& remoteEndpoint, char *data, std::size_t size );
-    
-    static void SetUdpBufferSize( unsigned long bufferSize );
-    static unsigned long GetUdpBufferSize();
-    
-protected:
 	// Enable broadcast addresses (e.g. x.x.x.255)
 	// Sets SO_BROADCAST socket option.
 	void SetEnableBroadcast( bool enableBroadcast );
@@ -129,7 +101,31 @@ protected:
 	// and may have drastically different behavior on different
 	// operating systems.
 	void SetAllowReuse( bool allowReuse );
-    static unsigned long maxBufferSize;
+
+
+	// The socket is created in an unbound, unconnected state
+	// such a socket can only be used to send to an arbitrary
+	// address using SendTo(). To use Send() you need to first
+	// connect to a remote endpoint using Connect(). To use
+	// ReceiveFrom you need to first bind to a local endpoint
+	// using Bind().
+
+	// Retrieve the local endpoint name when sending to 'to'
+	IpEndpointName LocalEndpointFor( const IpEndpointName& remoteEndpoint ) const;
+
+	// Connect to a remote endpoint which is used as the target
+	// for calls to Send()
+	void Connect( const IpEndpointName& remoteEndpoint );	
+	void Send( const char *data, std::size_t size );
+    void SendTo( const IpEndpointName& remoteEndpoint, const char *data, std::size_t size );
+
+
+	// Bind a local endpoint to receive incoming data. Endpoint
+	// can be 'any' for the system to choose an endpoint
+	void Bind( const IpEndpointName& localEndpoint );
+	bool IsBound() const;
+
+    std::size_t ReceiveFrom( IpEndpointName& remoteEndpoint, char *data, std::size_t size );
 };
 
 
@@ -140,15 +136,15 @@ protected:
 
 class UdpTransmitSocket : public UdpSocket{
 public:
-	UdpTransmitSocket( const IpEndpointName& remoteEndpoint, bool enableBroadcast = false )
-		{ Connect( remoteEndpoint, enableBroadcast ); }
+	UdpTransmitSocket( const IpEndpointName& remoteEndpoint )
+		{ Connect( remoteEndpoint ); }
 };
 
 
 class UdpReceiveSocket : public UdpSocket{
 public:
-	UdpReceiveSocket( const IpEndpointName& localEndpoint, bool allowReuse = false )
-		{ Bind( localEndpoint, allowReuse ); }
+	UdpReceiveSocket( const IpEndpointName& localEndpoint )
+		{ Bind( localEndpoint ); }
 };
 
 
@@ -159,10 +155,10 @@ class UdpListeningReceiveSocket : public UdpSocket{
     SocketReceiveMultiplexer mux_;
     PacketListener *listener_;
 public:
-	UdpListeningReceiveSocket( const IpEndpointName& localEndpoint, PacketListener *listener, bool allowReuse = false )
+	UdpListeningReceiveSocket( const IpEndpointName& localEndpoint, PacketListener *listener )
         : listener_( listener )
     {
-        Bind( localEndpoint, allowReuse );
+        Bind( localEndpoint );
         mux_.AttachSocketListener( this, listener_ );
     }
 
