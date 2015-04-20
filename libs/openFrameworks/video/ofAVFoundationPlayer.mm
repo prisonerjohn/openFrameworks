@@ -250,6 +250,32 @@ bool ofAVFoundationPlayer::isAudioLoaded()
 }
 
 //--------------------------------------------------------------
+bool ofAVFoundationPlayer::isBuffering()
+{
+    return moviePlayer && [moviePlayer isBuffering];
+}
+
+//--------------------------------------------------------------
+float ofAVFoundationPlayer::getBufferDuration()
+{
+    if (moviePlayer) {
+        return [moviePlayer bufferDuration];
+    }
+    
+    return getDuration();
+}
+
+//--------------------------------------------------------------
+float ofAVFoundationPlayer::getBufferProgress()
+{
+    if (moviePlayer) {
+        return [moviePlayer bufferDuration] / [moviePlayer duration];
+    }
+    
+    return 0;
+}
+
+//--------------------------------------------------------------
 bool ofAVFoundationPlayer::isPlaying()
 {
     return moviePlayer && [moviePlayer isPlaying];

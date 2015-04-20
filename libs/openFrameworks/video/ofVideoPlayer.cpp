@@ -389,6 +389,30 @@ float ofVideoPlayer::getHeight(){
 }
 
 //----------------------------------------------------------
+bool ofVideoPlayer::isBuffering(){
+    if(	player != NULL ){
+        return player->isBuffering();
+    }
+    return false;
+}
+
+//----------------------------------------------------------
+float ofVideoPlayer::getBufferDuration(){
+    if(	player != NULL ){
+        return player->getBufferDuration();
+    }
+    return 1.0;
+}
+
+//----------------------------------------------------------
+float ofVideoPlayer::getBufferProgress(){
+    if(	player != NULL ){
+        return player->getBufferProgress();
+    }
+    return 1.0;
+}
+
+//----------------------------------------------------------
 bool ofVideoPlayer::isPaused(){
 	if(	player != NULL ){
 		return player->isPaused();

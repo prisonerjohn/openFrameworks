@@ -53,6 +53,9 @@ int count = 0;
         [self.player autorelease];
         _amplitudes = [[NSMutableData data] retain];
         
+        _bBuffering = NO;
+        _bufferDuration = 0.0;
+        
         _bLoading = NO;
         _bLoaded = NO;
         _bAudioLoaded = NO;
@@ -95,6 +98,9 @@ int count = 0;
 //--------------------------------------------------------------
 - (void)loadURL:(NSURL *)url
 {
+    _bBuffering = YES;
+    _bufferDuration = 0.0;
+    
     _bLoading = YES;
     _bLoaded = NO;
     _bAudioLoaded = NO;
@@ -166,6 +172,7 @@ int count = 0;
                     }
                 }
                 
+                /* EZ: This leaks and isn't used, so I'll just comment it out for now.
                 // Only monitor audio if the file is local and has audio tracks.
                 NSArray *audioTracks = [asset tracksWithMediaType:AVMediaTypeAudio];
                 if ([url isFileURL] && [audioTracks count] > 0) {
@@ -253,6 +260,7 @@ int count = 0;
                                                                                      }];
                     }
                 }
+                */
                 
                 _bLoading = NO;
                 _bLoaded = YES;
@@ -365,7 +373,20 @@ int count = 0;
 - (BOOL)update
 {
     if (![self isLoaded]) return NO;
-
+    
+    if (_bBuffering) {
+        // Check how much we've buffered out of the total.
+        NSArray *loadedTimeRanges = [self.player.currentItem loadedTimeRanges];
+        CMTimeRange timeRange = [[loadedTimeRanges objectAtIndex:0] CMTimeRangeValue];
+        Float64 startSeconds = CMTimeGetSeconds(timeRange.start);
+        Float64 durationSeconds = CMTimeGetSeconds(timeRange.duration);
+        _bufferDuration = startSeconds + durationSeconds;
+        
+        if ([self duration] > 0.0 && _bufferDuration == [self duration]) {
+            _bBuffering = false;
+        }
+    }
+    
     // Check our video output for new frames.
     CMTime outputItemTime = [self.playerItemVideoOutput itemTimeForHostTime:CACurrentMediaTime()];
     if ([self.playerItemVideoOutput hasNewPixelBufferForItemTime:outputItemTime]) {

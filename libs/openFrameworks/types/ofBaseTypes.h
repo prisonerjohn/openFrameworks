@@ -250,6 +250,10 @@ public:
 	
 	virtual float 				getWidth() = 0;
 	virtual float 				getHeight() = 0;
+    
+    virtual bool                isBuffering(){return false;}
+    virtual float               getBufferDuration(){return getDuration();}
+    virtual float               getBufferProgress(){return 1.0;}
 	
 	virtual bool				isPaused() = 0;
 	virtual bool				isLoaded() = 0;

@@ -53,6 +53,10 @@ public:
     bool                isLoaded();
     bool                isAudioLoaded();
     
+    bool                isBuffering();
+    float               getBufferDuration();
+    float               getBufferProgress();
+    
     bool                isPlaying();
     bool                getIsMovieDone();
     
