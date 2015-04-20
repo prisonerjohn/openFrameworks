@@ -212,10 +212,10 @@ void ofVideoPlayer::stop(){
 //--------------------------------------------------------
 void ofVideoPlayer::setVolume(float volume){
 	if( player != NULL ){
-//		if ( volume > 1.0f ){
+		if ( volume > 1.0f ){
 //			ofLogWarning("ofVideoPlayer") << "setVolume(): expected range is 0-1, limiting requested volume " << volume << " to 1.0";
-//			volume = 1.0f;
-//		}
+			volume = 1.0f;
+		}
 		player->setVolume(volume);
 	}
 }

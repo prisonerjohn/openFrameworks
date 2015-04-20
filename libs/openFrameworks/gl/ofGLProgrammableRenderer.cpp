@@ -577,7 +577,11 @@ ofMatrix4x4 ofGLProgrammableRenderer::getCurrentMatrix(ofMatrixMode matrixMode_)
 		case OF_MATRIX_TEXTURE:
 			return matrixStack.getTextureMatrix();
 			break;
+		default:
+			ofLogError("ofGLProgrammableRenderer::getCurrentMatrix") << "Invalid matrix mode " << matrixMode_;
+			return ofMatrix4x4();
 	}
+
 }
 
 //----------------------------------------------------------

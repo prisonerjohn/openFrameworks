@@ -295,7 +295,7 @@ typedef TESSindex ofIndexType;
 
 //------------------------------------------------  video player
 // check if any video player system is already defined from the compiler
-#if !defined(OF_VIDEO_PLAYER_GSTREAMER) && !defined(OF_VIDEO_PLAYER_QUICKTIME) && !defined(OF_VIDEO_PLAYER_DIRECTSHOW) && !defined(OF_VIDEO_PLAYER_ANDROID) && !defined(OF_VIDEO_PLAYER_IOS)
+#if !defined(OF_VIDEO_PLAYER_GSTREAMER) && !defined(OF_VIDEO_PLAYER_QUICKTIME) && !defined(OF_VIDEO_PLAYER_DIRECTSHOW) && !defined(OF_VIDEO_PLAYER_WMFOUNDATION) && !defined(OF_VIDEO_PLAYER_ANDROID) && !defined(OF_VIDEO_PLAYER_IOS)
 	#ifdef TARGET_LINUX
 		#define OF_VIDEO_PLAYER_GSTREAMER
 
@@ -314,8 +314,8 @@ typedef TESSindex ofIndexType;
         #endif
 
 	#elif defined(TARGET_WIN32)
-		#define OF_VIDEO_PLAYER_DIRECTSHOW
-
+		//#define OF_VIDEO_PLAYER_DIRECTSHOW
+		#define OF_VIDEO_PLAYER_WMFOUNDATION
 	#elif defined(TARGET_ANDROID)
 		#define OF_VIDEO_PLAYER_ANDROID
 

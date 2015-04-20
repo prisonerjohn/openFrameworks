@@ -40,6 +40,12 @@
     <Filter Include="libs\openFrameworks\utils">
       <UniqueIdentifier>{e769ef16-c02a-402a-8eff-5d109f5a3a86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="libs\openFrameworks\video\wmfpresenter">
+      <UniqueIdentifier>{9533f102-91e5-4b04-b52b-b26d6f285b62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\openFrameworks\video\wmfpresenter\common">
+      <UniqueIdentifier>{4d2cdfb4-d441-409b-9e01-2831a45e1478}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\openFrameworks\ofMain.h">
@@ -255,11 +261,77 @@
     <ClInclude Include="..\..\..\openFrameworks\utils\ofXml.h">
       <Filter>libs\openFrameworks\utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\openFrameworks\video\ofDirectShowPlayer.h">
-      <Filter>libs\openFrameworks\video</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\openFrameworks\graphics\ofCairoRenderer.h">
       <Filter>libs\openFrameworks\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\EVRPresenter.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\EVRPresenterUuid.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\Helpers.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\PresentEngine.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\Presenter.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\scheduler.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\AsyncCB.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\BufferLock.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\ClassFactory.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\common.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\critsec.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\GrowArray.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\linklist.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\logging.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\logmediatype.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\mediatype.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\mfutils.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\PropVar.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\registry.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\TinyMap.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\wmfpresenter\common\trace.h">
+      <Filter>libs\openFrameworks\video\wmfpresenter\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\ofWMFoundationPlayer.h">
+      <Filter>libs\openFrameworks\video</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\openFrameworks\video\ofWMFoundationPlayerUtils.h">
+      <Filter>libs\openFrameworks\video</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -440,11 +512,26 @@
     <ClCompile Include="..\..\..\openFrameworks\utils\ofXml.cpp">
       <Filter>libs\openFrameworks\utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\openFrameworks\video\ofDirectShowPlayer.cpp">
-      <Filter>libs\openFrameworks\video</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\openFrameworks\graphics\ofCairoRenderer.cpp">
       <Filter>libs\openFrameworks\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\openFrameworks\video\wmfpresenter\Helpers.cpp">
+      <Filter>libs\openFrameworks\video\wmfpresenter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\openFrameworks\video\wmfpresenter\PresentEngine.cpp">
+      <Filter>libs\openFrameworks\video\wmfpresenter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\openFrameworks\video\wmfpresenter\Presenter.cpp">
+      <Filter>libs\openFrameworks\video\wmfpresenter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\openFrameworks\video\wmfpresenter\scheduler.cpp">
+      <Filter>libs\openFrameworks\video\wmfpresenter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\openFrameworks\video\ofWMFoundationPlayer.cpp">
+      <Filter>libs\openFrameworks\video</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\openFrameworks\video\ofWMFoundationPlayerUtils.cpp">
+      <Filter>libs\openFrameworks\video</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
