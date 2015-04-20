@@ -106,6 +106,10 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 
 		float 				getHeight();
 		float 				getWidth();
+    
+        bool                isBuffering();
+        float               getBufferDuration();
+        float               getBufferProgress();
 
 		bool				isPaused();
 		bool				isLoaded();
