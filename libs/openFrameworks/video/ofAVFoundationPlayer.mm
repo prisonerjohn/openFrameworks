@@ -116,7 +116,7 @@ void ofAVFoundationPlayer::update()
         bHavePixelsChanged = bNewFrame;
     }
     else {
-        ofLogNotice("ofAVFoundationPlayer::update()") << "Movie player not ready";
+        ofLogVerbose("ofAVFoundationPlayer::update()") << "Movie player not ready";
     }
 }
 
