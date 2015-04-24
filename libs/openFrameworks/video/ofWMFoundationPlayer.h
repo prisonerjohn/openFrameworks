@@ -32,9 +32,16 @@ class ofWMFoundationPlayer : public ofBaseVideoPlayer {
 		int _height;
 
 		bool _waitingForLoad;
+		bool _waitingToPlay;
+		bool _waitingToSetPosition;
+		bool _waitingToSetVolume;
+
+		//DELETE THESE
 		bool _waitForLoadedToPlay;
-		bool _isLooping;
 		bool _wantToSetVolume;
+		////////
+
+		bool _isLooping;
 		float _currentVolume;
 
 		bool _sharedTextureCreated;

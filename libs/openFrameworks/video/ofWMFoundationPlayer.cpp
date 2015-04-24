@@ -60,9 +60,9 @@ ofWMFoundationPlayer::ofWMFoundationPlayer() : _player(NULL)
 
 
 	_waitingForLoad = false;
-	_waitForLoadedToPlay = false;
+	//_waitForLoadedToPlay = false;
 	_sharedTextureCreated = false;
-	_wantToSetVolume = false;
+	//_wantToSetVolume = false;
 	_currentVolume = 1.0;
 	_frameRate = 0.0f;
 
@@ -117,9 +117,7 @@ bool ofWMFoundationPlayer::loadMovie(string name, bool asynchronous)
 	if(name.find("http") == string::npos){
 		DWORD fileAttr = GetFileAttributesA(ofToDataPath(name).c_str());
 		if (fileAttr == INVALID_FILE_ATTRIBUTES) {
-			stringstream s;
-			s << "The video file '" << name << "'is missing.";
-			ofLog(OF_LOG_ERROR, "ofWMFoundationPlayer:" + s.str());
+			ofLogError("ofWMFoundationPlayer::loadMovie") << "The video file '" << name << "'is missing.";
 			return false;
 		}
 		string s = ofToDataPath(name);
@@ -151,7 +149,6 @@ bool ofWMFoundationPlayer::loadMovie(string name, bool asynchronous)
 	}
 	
 	_waitForLoadedToPlay = false;
-
 	return endLoad();
 
 }
@@ -160,7 +157,9 @@ bool ofWMFoundationPlayer::endLoad(){
 
 	_frameRate = 0.0; //reset frameRate as the new movie loaded might have a different value than previous one
 
-	if (!_sharedTextureCreated)
+	if (!_sharedTextureCreated || 
+		_width != _player->getWidth() || 
+		_height != _player->getHeight())
 	{
 
 		_width = _player->getWidth();
@@ -171,22 +170,21 @@ bool ofWMFoundationPlayer::endLoad(){
 		_player->m_pEVRPresenter->createSharedTexture(_width, _height, _tex.texData.textureID);
 		_sharedTextureCreated = true;
 	}
-	else
-	{
-		if ((_width != _player->getWidth()) || (_height != _player->getHeight()))
-		{
+	//else
+	//{
+	//	{
 
-			_player->m_pEVRPresenter->releaseSharedTexture();
+	//		_player->m_pEVRPresenter->releaseSharedTexture();
 
-			_width = _player->getWidth();
-			_height = _player->getHeight();
+	//		_width = _player->getWidth();
+	//		_height = _player->getHeight();
 
-			_tex.allocate(_width, _height, GL_RGBA, true);
-			_player->m_pEVRPresenter->createSharedTexture(_width, _height, _tex.texData.textureID);
+	//		_tex.allocate(_width, _height, GL_RGBA, true);
+	//		_player->m_pEVRPresenter->createSharedTexture(_width, _height, _tex.texData.textureID);
 
-		}
+	//	}
 
-	}
+	//}
 
 	return true;
 
@@ -194,40 +192,36 @@ bool ofWMFoundationPlayer::endLoad(){
 
 void ofWMFoundationPlayer::draw(int x, int y, int w, int h) {
 
-
 	_player->m_pEVRPresenter->lockSharedTexture();
 	_tex.draw(x, y, w, h);
 	_player->m_pEVRPresenter->unlockSharedTexture();
 
-
-
 }
 
-
-bool  ofWMFoundationPlayer::isPlaying() {
+bool ofWMFoundationPlayer::isPlaying() {
 	return _player->GetState() == Started;
 }
-bool  ofWMFoundationPlayer::isStopped() {
+bool ofWMFoundationPlayer::isStopped() {
 	return (_player->GetState() == Stopped || _player->GetState() == Paused);
 }
 
-bool  ofWMFoundationPlayer::isPaused()
+bool ofWMFoundationPlayer::isPaused()
 {
 	return _player->GetState() == Paused;
 }
 
-
-
-
-void	ofWMFoundationPlayer::close() {
+void ofWMFoundationPlayer::close() {
 	_player->Shutdown();
 	_currentVolume = 1.0;
 	_wantToSetVolume = false;
 
 }
-void	ofWMFoundationPlayer::update() {
+
+void ofWMFoundationPlayer::update() {
+	
 	if (!_player) return;
 
+	//Finish an asynchronous load
 	if(_waitingForLoad && _player->GetState() == OpenAsyncComplete){
 		_player->EndOpenURL();
 		endLoad();
@@ -241,14 +235,16 @@ void	ofWMFoundationPlayer::update() {
 
 	}
 
-	DWORD d;
-	_player->GetBufferProgress(&d);
-
-	if ((_wantToSetVolume))
+	if (_wantToSetVolume)
 	{
 		_player->setVolume(_currentVolume);
-
 	}
+
+	//TODO: Implement buffering progress
+	DWORD d;
+	_player->GetBufferProgress(&d);
+	/////////////////////////////
+
 	return;
 }
 
@@ -346,7 +342,7 @@ float 			ofWMFoundationPlayer::getPosition()
 	//	return _player->getPosition();
 }
 
-float 			ofWMFoundationPlayer::getDuration() {
+float ofWMFoundationPlayer::getDuration() {
 	return _player->getDuration();
 }
 
