@@ -133,13 +133,28 @@ int count = 0;
             
             if (status == AVKeyValueStatusLoaded) {
                 // Asset metadata has been loaded, set up the player.
+                AVAssetTrack *mainTrack = nil;
+                NSArray *videoTracks = [asset tracksWithMediaType:AVMediaTypeVideo];
+                if (videoTracks.count) {
+                    // Extract the video track to get the video size and other properties.
+                    mainTrack = [videoTracks objectAtIndex:0];
+                }
+                else {
+                    // No video track, look for an audio track to read properties from.
+                    NSArray *audioTracks = [asset tracksWithMediaType:AVMediaTypeAudio];
+                    if (audioTracks.count) {
+                        mainTrack = [audioTracks objectAtIndex:0];
+                    }
+                    else {
+                        // No video or audio, get it together!
+                        NSLog(@"Error loading URL %@: No video or audio tracks found!", [url absoluteString]);
+                    }
+                }
                 
-                // Extract the video track to get the video size and other properties.
-                AVAssetTrack *videoTrack = [[asset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-                _videoSize = [videoTrack naturalSize];
+                _videoSize = [mainTrack naturalSize];
                 _currentTime = kCMTimeZero;
                 _duration = asset.duration;
-                _frameRate = [videoTrack nominalFrameRate];
+                _frameRate = [mainTrack nominalFrameRate];
                 
                 self.playerItem = [AVPlayerItem playerItemWithAsset:asset];
                 [self.playerItem addObserver:self forKeyPath:@"status" options:0 context:&kItemStatusContext];
@@ -153,7 +168,7 @@ int count = 0;
                 
                 [self.player replaceCurrentItemWithPlayerItem:self.playerItem];
                 
-                // Create and attach video output. 10.8 Only!!!
+                // Create and attach video output.
                 self.playerItemVideoOutput = [[AVPlayerItemVideoOutput alloc] initWithPixelBufferAttributes:[self pixelBufferAttributes]];
                 [self.playerItemVideoOutput autorelease];
                 if (self.playerItemVideoOutput) {
@@ -387,6 +402,10 @@ int count = 0;
         }
     }
     
+    // Update time.
+    _currentTime = self.player.currentItem.currentTime;
+    _duration = self.player.currentItem.duration;
+    
     // Check our video output for new frames.
     CMTime outputItemTime = [self.playerItemVideoOutput itemTimeForHostTime:CACurrentMediaTime()];
     if ([self.playerItemVideoOutput hasNewPixelBufferForItemTime:outputItemTime]) {
@@ -411,10 +430,6 @@ int count = 0;
                 NSLog(@"Error creating OpenGL texture %d", err);
             }
         }
-                
-        // Update time.
-        _currentTime = self.player.currentItem.currentTime;
-        _duration = self.player.currentItem.duration;
         
         return YES;
     }
