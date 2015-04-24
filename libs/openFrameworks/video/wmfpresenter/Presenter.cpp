@@ -17,8 +17,6 @@
 #pragma warning( push )
 #pragma warning( disable : 4355 )  // 'this' used in base member initializer list
 
-
-
 DEFINE_CLASSFACTORY_SERVER_LOCK;
 
 // Default frame rate.
@@ -38,6 +36,9 @@ inline float MFOffsetToFloat(const MFOffset& offset)
 {
     return offset.value + (float(offset.fract) / 65536);
 }
+
+
+
 
 //-----------------------------------------------------------------------------
 // CreateInstance

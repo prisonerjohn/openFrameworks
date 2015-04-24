@@ -73,7 +73,7 @@ namespace MediaFoundationSamples
         if (SUCCEEDED(hr))
         {
             MF_OBJECT_TYPE ObjectType = MF_OBJECT_INVALID;
-
+			
             hr = pSourceResolver->CreateObjectFromURL(
                 sURL,                       // URL of the source.
                 MF_RESOLUTION_MEDIASOURCE,  // Create a source object.
@@ -92,6 +92,55 @@ namespace MediaFoundationSamples
         // Clean up
         SAFE_RELEASE(pSourceResolver);
         SAFE_RELEASE(pSourceUnk);
+
+        return hr;
+    }
+
+    inline HRESULT BeginCreateMediaSource(const WCHAR *sURL, IMFAsyncCallback *pCallback, IMFSourceResolver **pSourceResolver)
+    {
+        CheckPointer(sURL, E_POINTER);
+        CheckPointer(pSourceResolver, E_POINTER);
+        //CheckPointer(ppSource, E_POINTER);
+
+        HRESULT hr = MFCreateSourceResolver(pSourceResolver);
+
+        // Use the source resolver to create the media source.
+        if (SUCCEEDED(hr))
+        {
+            MF_OBJECT_TYPE ObjectType = MF_OBJECT_INVALID;
+			
+            hr = (*pSourceResolver)->BeginCreateObjectFromURL(
+                sURL,                       // URL of the source.
+                MF_RESOLUTION_MEDIASOURCE,  // Create a source object.
+                NULL,                       // Optional property store.
+				NULL,						// Optional Cancel cookie (TODO: use this!)
+                pCallback,					// invoker object. 
+                NULL						// User Data.
+                );
+			/*
+            hr = pSourceResolver->CreateObjectFromURL(
+                sURL,                       // URL of the source.
+                MF_RESOLUTION_MEDIASOURCE,  // Create a source object.
+                NULL,                       // Optional property store.
+                &ObjectType,                // Receives the created object type. 
+                &pSourceUnk                 // Receives a pointer to the media source.
+                );
+			*/
+
+        }
+
+		/*
+		////// NEED TO MOVE TO END CALLBACK
+        // Get the IMFMediaSource interface from the media source.
+        if (SUCCEEDED(hr))
+        {
+            hr = pSourceUnk->QueryInterface(__uuidof(IMFMediaSource), (void**)ppSource);
+        }
+
+        // Clean up
+        SAFE_RELEASE(pSourceResolver);
+        SAFE_RELEASE(pSourceUnk);
+		*/
 
         return hr;
     }
@@ -137,7 +186,8 @@ namespace MediaFoundationSamples
     // pcchLen:  Receives the length of the string, in characters, not including
     //           the terminating NULL character. This parameter can be NULL.
     //--------------------------------------------------------------------------------------
-
+	/*
+	JG: Commented out to remove TCHAR* cannot conver to WCHAR* -- function not used
     inline HRESULT AllocGetWindowText(HWND hwnd, WCHAR **pszText, DWORD *pcchLen)
     {
         if (pszText == NULL)
@@ -185,4 +235,5 @@ namespace MediaFoundationSamples
         }
         return S_OK;
     }
+	*/
 };

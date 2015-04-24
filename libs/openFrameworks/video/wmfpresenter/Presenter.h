@@ -68,7 +68,6 @@ enum FRAMESTEP_STATE
 //  Description: Implements the custom presenter.
 //-----------------------------------------------------------------------------
 
-
 class EVRCustomPresenter : 
     BaseObject,  
     RefCountedObject, 
@@ -257,10 +256,10 @@ protected:
     IMediaEventSink             *m_pMediaEventSink;      // The EVR's event-sink interface.
     IMFMediaType                *m_pMediaType;           // Output media type
 
+
 public:
 	HANDLE getSharedDeviceHandle();
 	bool createSharedTexture(int w, int h, int textureID) { return m_pD3DPresentEngine->createSharedTexture(w,h, textureID ); }
-    unsigned char* getPixels() {return m_pD3DPresentEngine->getPixels();};
 	bool lockSharedTexture() { return m_pD3DPresentEngine->lockSharedTexture(); }
 	bool unlockSharedTexture() { return m_pD3DPresentEngine->unlockSharedTexture(); }
 	void releaseSharedTexture() { return m_pD3DPresentEngine->releaseSharedTexture(); } ;

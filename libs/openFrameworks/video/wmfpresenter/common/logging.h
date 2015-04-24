@@ -22,8 +22,9 @@ namespace MediaFoundationSamples
     // In retail builds, these macros are mapped to nothing.
     //--------------------------------------------------------------------------------------
 
-#ifdef _DEBUG
-
+//#ifdef _DEBUG
+	/*
+	JG: WCHAR / TCHAR BUGS
     class DebugLog
     {
     public:
@@ -57,11 +58,11 @@ namespace MediaFoundationSamples
             assert( bLeak == FALSE );
         }
     };
-
-#else
+	*/
+//#else
 // For retail builds, turn off USE_LOGGING
 #undef USE_LOGGING
-#endif
+//#endif
 
 #ifdef USE_LOGGING
     #define TRACE_INIT() DebugLog::Initialize()
