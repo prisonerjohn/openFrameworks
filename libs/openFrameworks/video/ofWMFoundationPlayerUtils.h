@@ -1,4 +1,4 @@
-//ofWMFoundationPlayer addon written by Philippe Laulheret for Second Story (secondstory.com)
+//ofxWMFVideoPlayer addon written by Philippe Laulheret for Second Story (secondstory.com)
 //Based upon Windows SDK samples
 //MIT Licensing
 
@@ -47,15 +47,15 @@ const UINT WM_APP_PLAYER_EVENT = WM_APP + 1;
 
 enum PlayerState
 {
-    Closed = 0,     // No session.
-    Ready,          // Session was created, ready to open a file. 
-	OpenAsyncPending,// Session is creating URL resource
-	OpenAsyncComplete, // Session finished opening URL
-    OpenPending,    // Session is opening a file.
-    Started,        // Session is playing a file.
-    Paused,         // Session is paused.
-    Stopped,        // Session is stopped (ready to play). 
-    Closing         // Application has closed the session, but is waiting for MESessionClosed.
+    Closed = 0,			// No session.
+    Ready,				// Session was created, ready to open a file. 
+    OpenAsyncPending,	// Session is creating URL resource.
+	OpenAsyncComplete,  // Session finished opening URL.
+    OpenPending,		// Session is opening a file.
+    Started,			// Session is playing a file.
+    Paused,				// Session is paused.
+    Stopped,			// Session is stopped (ready to play). 
+    Closing				// Application has closed the session, but is waiting for MESessionClosed.
 };
 
 class CPlayer : public IMFAsyncCallback
@@ -81,44 +81,36 @@ public:
 	HRESULT		  OpenURLAsync(const WCHAR *sURL);
 	HRESULT		  EndOpenURL();
 
-	//Open multiple url in a same topology... Play with that of you want to do some video syncing
-	HRESULT       OpenMultipleURL(vector<const WCHAR *> &sURL);
     HRESULT       Play();
     HRESULT       Pause();
     HRESULT       Stop();
     HRESULT       Shutdown();
     HRESULT       HandleEvent(UINT_PTR pUnkPtr);
-	HRESULT		  GetBufferProgress(DWORD *pProgress);
 
-    PlayerState   GetState() const { return m_state; }
+	HRESULT		  GetBufferDuration(DWORD *pDuration);
+    HRESULT		  GetBufferProgress(DWORD *pProgress);
+	
+	PlayerState   GetState() const { return m_state; }
 
-
-    
     BOOL          HasVideo() const { return (m_pVideoDisplay != NULL);  }
-
 
 	HRESULT		  SetPlaybackRate(BOOL bThin, float rateRequested);
 	float		  GetPlaybackRate();
-	float getDuration();
-	float getPosition();
-	float getWidth() { 
-		return _width; 
-	}
-	float getHeight() { 
-		return _height;
-	}
-
-	HRESULT setPosition(float pos);
-
-	bool _isLooping;
-	bool isLooping() { return _isLooping; }
-	void setLooping(bool isLooping) { _isLooping = isLooping; }
-
 	
-	HRESULT setVolume(float vol);
-	float   getVolume() { return _currentVolume; }
+	float GetDuration();
+	float GetPosition();
+	float GetWidth() { return m_width; }
+	float GetHeight() { return m_height; }
 
-	float getFrameRate();
+	HRESULT SetPosition(float pos);
+
+	bool GetLooping() { return m_isLooping; }
+	void SetLooping(bool isLooping) { m_isLooping = isLooping; }
+
+	HRESULT SetVolume(float vol);
+	float   GetVolume() { return m_currentVolume; }
+
+	float GetFrameRate();
 
 
 protected:
@@ -133,7 +125,6 @@ protected:
     HRESULT CreateSession();
     HRESULT CloseSession();
     HRESULT StartPlayback();
-
 
 	HRESULT SetMediaInfo( IMFPresentationDescriptor *pPD );
 
@@ -151,29 +142,28 @@ protected:
 protected:
     long                    m_nRefCount;        // Reference count.
 
-    IMFSequencerSource      *m_pSequencerSource;
-	IMFSourceResolver		*m_pSourceResolver;
-    IMFMediaSource          *m_pSource;
-    IMFVideoDisplayControl  *m_pVideoDisplay;
-
-	MFSequencerElementId	_previousTopoID;
+    IMFSequencerSource	   *m_pSequencerSource;
+    IMFSourceResolver	   *m_pSourceResolver;
+    IMFMediaSource         *m_pSource;
+    IMFVideoDisplayControl *m_pVideoDisplay;
+	MFSequencerElementId	m_previousTopoID;
     HWND                    m_hwndVideo;        // Video window.
     HWND                    m_hwndEvent;        // App window to receive events.
     PlayerState             m_state;            // Current state of the media session.
     HANDLE                  m_hCloseEvent;      // Event to wait on while closing.
 	IMFAudioStreamVolume   *m_pVolumeControl;
+	bool					m_isLooping;
+	int						m_width;
+	int						m_height;
+	float					m_currentVolume;
 
 public:
-	EVRCustomPresenter * m_pEVRPresenter; // Custom EVR for texture sharing
-	IMFMediaSession         *m_pSession;
+	EVRCustomPresenter *m_pEVRPresenter; // Custom EVR for texture sharing
+	IMFMediaSession    *m_pSession;
 	
 	vector<EVRCustomPresenter*> v_EVRPresenters;  //if you want to load multiple sources in one go
 	vector<IMFMediaSource*>     v_sources;        //for doing frame symc... this is experimental
 
-protected:
-	int _width;
-	int _height;
-	float _currentVolume;
 };
 
 #endif PLAYER_H
