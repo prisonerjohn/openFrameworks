@@ -109,6 +109,7 @@ CPlayer::CPlayer(HWND hVideo, HWND hEvent) :
 	m_pVolumeControl(NULL),
 	m_previousTopoID(0),
 	m_isLooping(false),
+	m_isBuffering(false),
 	m_width(0),
 	m_height(0)
 {
@@ -529,11 +530,11 @@ HRESULT CPlayer::HandleEvent(UINT_PTR pEventPtr)
 		break;
 
 	case MEBufferingStarted:
-		cout << "MMM BUFFERING..." << endl;
+		m_isBuffering = true;
 		break;
 
 	case MEBufferingStopped:
-		cout << "MMM end BUFFERING..." << endl;
+		m_isBuffering = false;
 		break;
 
     default:
@@ -543,36 +544,6 @@ HRESULT CPlayer::HandleEvent(UINT_PTR pEventPtr)
 
 done:
     SafeRelease(&pEvent);
-    return hr;
-}
-
-HRESULT CPlayer::GetBufferDuration(DWORD *pDuration)
-{
-    IPropertyStore *pProp = NULL;
-    PROPVARIANT var;
-
-    // Get the property store from the media session.
-    HRESULT hr = MFGetService(
-        m_pSession, 
-        MFNETSOURCE_STATISTICS_SERVICE, 
-        IID_PPV_ARGS(&pProp)
-        );
-
-    if (SUCCEEDED(hr))
-    {
-        PROPERTYKEY key;
-        key.fmtid = MFNETSOURCE_STATISTICS;
-        key.pid = MFNETSOURCE_BUFFERSIZE_ID;
-
-        hr = pProp->GetValue(key, &var);
-    }
-
-    if (SUCCEEDED(hr))
-    {
-        *pDuration = var.lVal;
-    }
-    PropVariantClear(&var);
-    SafeRelease(&pProp);
     return hr;
 }
 

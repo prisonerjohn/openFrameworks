@@ -87,7 +87,6 @@ public:
     HRESULT       Shutdown();
     HRESULT       HandleEvent(UINT_PTR pUnkPtr);
 
-	HRESULT		  GetBufferDuration(DWORD *pDuration);
     HRESULT		  GetBufferProgress(DWORD *pProgress);
 	
 	PlayerState   GetState() const { return m_state; }
@@ -106,6 +105,8 @@ public:
 
 	bool GetLooping() { return m_isLooping; }
 	void SetLooping(bool isLooping) { m_isLooping = isLooping; }
+
+	bool GetBuffering() { return m_isBuffering; }
 
 	HRESULT SetVolume(float vol);
 	float   GetVolume() { return m_currentVolume; }
@@ -153,6 +154,7 @@ protected:
     HANDLE                  m_hCloseEvent;      // Event to wait on while closing.
 	IMFAudioStreamVolume   *m_pVolumeControl;
 	bool					m_isLooping;
+	bool					m_isBuffering;
 	int						m_width;
 	int						m_height;
 	float					m_currentVolume;

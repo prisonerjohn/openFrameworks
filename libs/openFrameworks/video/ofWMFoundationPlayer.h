@@ -60,7 +60,11 @@ public:
 
 	void play();
 	void stop();		
-	void setPaused(bool bPaused); 
+	void setPaused(bool bPaused);
+
+	bool isBuffering();
+    float getBufferDuration();
+    float getBufferProgress();
 
 	float getPosition();
 	float getDuration();

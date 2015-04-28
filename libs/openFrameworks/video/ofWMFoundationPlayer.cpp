@@ -211,6 +211,27 @@ bool ofWMFoundationPlayer::isPaused()
 	return _player->GetState() == Paused;
 }
 
+bool ofWMFoundationPlayer::isBuffering()
+{
+	return _player && _player->GetBuffering();
+}
+
+float ofWMFoundationPlayer::getBufferDuration()
+{
+	if (_player == NULL) return 0;
+
+	return getBufferProgress() * getDuration();
+}
+
+float ofWMFoundationPlayer::getBufferProgress()
+{
+	if (_player == NULL) return 0;
+
+	DWORD val;
+    _player->GetBufferProgress(&val);
+	return val / 100.0f; // 0-1
+}
+
 void ofWMFoundationPlayer::close() 
 {
 	_player->Shutdown();
