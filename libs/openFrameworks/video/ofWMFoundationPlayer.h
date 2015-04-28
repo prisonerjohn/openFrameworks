@@ -30,6 +30,7 @@ private:
 
 	bool _isLooping;
 	float _currentVolume;
+	float _currentPosition;
 
 	ofTexture _sharedTex;
 	bool _sharedTextureCreated;

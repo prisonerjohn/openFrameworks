@@ -180,6 +180,11 @@ void ofWMFoundationPlayer::update()
 		_player->SetVolume(_currentVolume);
 		_waitingToSetVolume = false;
 	}
+
+	if (_waitingToSetPosition && (_player->GetState() == Started || _player->GetState() == Paused)) {
+		_player->SetPosition(_currentPosition);
+		_waitingToSetPosition = false;
+	}
 }
 
 void ofWMFoundationPlayer::draw(int x, int y) 
@@ -296,7 +301,18 @@ float ofWMFoundationPlayer::getDuration()
 
 void ofWMFoundationPlayer::setPosition(float pos)
 {
-	_player->SetPosition(pos);
+	if (_player && 
+		_player->GetState() != OpenPending && 
+		_player->GetState() != Closing && 
+		_player->GetState() != Closed)  {
+		_player->SetPosition(pos);
+		_waitingToSetPosition = false;
+	}
+	else {
+		_waitingToSetPosition = true;
+	}
+
+	_currentPosition = pos;
 }
 
 bool ofWMFoundationPlayer::getIsMovieDone()
