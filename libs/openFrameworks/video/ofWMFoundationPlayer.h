@@ -20,8 +20,6 @@ private:
 
 	HWND _hwndPlayer;
 
-	BOOL bRepaintClient;
-
 	int _width;
 	int _height;
 
@@ -33,13 +31,13 @@ private:
 	bool _isLooping;
 	float _currentVolume;
 
+	ofTexture _sharedTex;
 	bool _sharedTextureCreated;
 
-	ofTexture _tex;
 	ofPixels _pixels;
 
 	BOOL InitInstance();
-
+	
 	void OnPlayerEvent(HWND hwnd, WPARAM pUnkPtr);
 
 	bool endLoad();
@@ -80,7 +78,7 @@ public:
 	bool isStopped();
 	bool isPaused();
 
-	bool isLooping() { return _isLooping; }
+	bool isLooping();
 	void setLoopState(ofLoopType loopType);
 	bool getIsMovieDone();
 
@@ -89,17 +87,19 @@ public:
 
 	bool isLoaded();
 
+	void bind();
+	void unbind();
+	ofTexture * getTexture();
+
 	unsigned char * getPixels();
-	ofPixels& getPixelsRef(){ return _pixels; }
-	ofTexture * getTexture(){ return &_tex; };
+	ofPixels& getPixelsRef();
 	bool setPixelFormat(ofPixelFormat pixelFormat);
 	ofPixelFormat getPixelFormat();
 
 	bool isFrameNew();
 
-	void draw(int x, int y , int w, int h);
-	void draw(int x, int y) { draw(x,y,getWidth(),getHeight()); }
-
+	void draw(int x, int y);
+	void draw(int x, int y , int w, int h);	
 
 	HWND getHandle() { return _hwndPlayer;}
 	LRESULT WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);

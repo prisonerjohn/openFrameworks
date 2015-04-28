@@ -83,6 +83,8 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 		void   				setSpeed(float speed);
 		void				setFrame(int frame);  // frame 0 = first frame...
 
+		void				bind();
+		void				unbind();
 		void 				setUseTexture(bool bUse);
 		ofTexture &			getTextureReference();
 		void 				draw(float x, float y, float w, float h);

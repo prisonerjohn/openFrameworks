@@ -119,6 +119,20 @@ ofPixelsRef ofVideoPlayer::getPixelsRef(){
 //}
 
 //---------------------------------------------------------------------------
+void ofVideoPlayer::bind(){
+	if (player != NULL){
+		player->bind();
+	}
+}
+
+//---------------------------------------------------------------------------
+void ofVideoPlayer::unbind(){
+	if (player != NULL){
+		player->unbind();
+	}
+}
+
+//---------------------------------------------------------------------------
 //for getting a reference to the texture
 ofTexture & ofVideoPlayer::getTextureReference(){
 	if(playerTex == NULL){
@@ -128,7 +142,6 @@ ofTexture & ofVideoPlayer::getTextureReference(){
 		return *playerTex;
 	}
 }
-
 
 //---------------------------------------------------------------------------
 bool ofVideoPlayer::isFrameNew(){
@@ -356,7 +369,9 @@ void ofVideoPlayer::resetAnchor(){
 
 //------------------------------------
 void ofVideoPlayer::draw(float _x, float _y, float _w, float _h){
-	getTextureReference().draw(_x, _y, _w, _h);	
+	bind();
+	getTextureReference().draw(_x, _y, _w, _h);
+	unbind();
 }
 
 //------------------------------------

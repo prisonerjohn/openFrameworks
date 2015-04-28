@@ -149,8 +149,8 @@ bool ofWMFoundationPlayer::endLoad()
 		_width = _player->GetWidth();
 		_height = _player->GetHeight();
 
-		_tex.allocate(_width, _height, GL_RGB, true);
-		_player->m_pEVRPresenter->createSharedTexture(_width, _height, _tex.texData.textureID);
+		_sharedTex.allocate(_width, _height, GL_RGB, true);
+		_player->m_pEVRPresenter->createSharedTexture(_width, _height, _sharedTex.texData.textureID);
 		
 		_sharedTextureCreated = true;
 	}
@@ -158,34 +158,6 @@ bool ofWMFoundationPlayer::endLoad()
 	_waitingForLoad = false;
 
 	return true;
-}
-
-void ofWMFoundationPlayer::draw(int x, int y , int w, int h) 
-{
-	_player->m_pEVRPresenter->lockSharedTexture();
-	_tex.draw(x, y, w, h);
-	_player->m_pEVRPresenter->unlockSharedTexture();
-}
-
-bool ofWMFoundationPlayer::isPlaying() 
-{
-	return _player->GetState() == Started;
-}
-
-bool ofWMFoundationPlayer::isStopped() 
-{
-	return (_player->GetState() == Stopped || _player->GetState() == Paused);
-}
-
-bool ofWMFoundationPlayer::isPaused() 
-{
-	return _player->GetState() == Paused;
-}
-
-void ofWMFoundationPlayer::close() 
-{
-	_player->Shutdown();
-	_currentVolume = 1.0;
 }
 
 void ofWMFoundationPlayer::update() 
@@ -208,6 +180,41 @@ void ofWMFoundationPlayer::update()
 		_player->SetVolume(_currentVolume);
 		_waitingToSetVolume = false;
 	}
+}
+
+void ofWMFoundationPlayer::draw(int x, int y) 
+{ 
+	draw(x, y, getWidth(), getHeight());
+}
+
+void ofWMFoundationPlayer::draw(int x, int y , int w, int h) 
+{
+	if (!_sharedTextureCreated) return;
+
+	_player->m_pEVRPresenter->lockSharedTexture();
+	_sharedTex.draw(x, y, w, h);
+	_player->m_pEVRPresenter->unlockSharedTexture();
+}
+
+bool ofWMFoundationPlayer::isPlaying() 
+{
+	return _player->GetState() == Started;
+}
+
+bool ofWMFoundationPlayer::isStopped() 
+{
+	return (_player->GetState() == Stopped || _player->GetState() == Paused);
+}
+
+bool ofWMFoundationPlayer::isPaused() 
+{
+	return _player->GetState() == Paused;
+}
+
+void ofWMFoundationPlayer::close() 
+{
+	_player->Shutdown();
+	_currentVolume = 1.0;
 }
 
 bool ofWMFoundationPlayer::isLoaded()
@@ -253,7 +260,7 @@ void ofWMFoundationPlayer::setPaused(bool bPaused)
 bool ofWMFoundationPlayer::isFrameNew()
 {
 	//TODO fix this
-	return true;
+	return (_player->GetState() == PlayerState::Started);
 }
 
 float ofWMFoundationPlayer::getPosition() 
@@ -360,13 +367,33 @@ bool ofWMFoundationPlayer::setSpeed(float speed, bool useThinning)
 	}
 }
 
+void ofWMFoundationPlayer::bind()
+{ 
+	_player->m_pEVRPresenter->lockSharedTexture();
+}
+
+void ofWMFoundationPlayer::unbind()
+{ 
+	_player->m_pEVRPresenter->unlockSharedTexture();
+}
+
+ofTexture * ofWMFoundationPlayer::getTexture()
+{ 
+	return &_sharedTex;
+}
+
 unsigned char * ofWMFoundationPlayer::getPixels()
 {
-	if (_tex.isAllocated()) {
-		_tex.readToPixels(_pixels);
+	if (_sharedTex.isAllocated()) {
+		_sharedTex.readToPixels(_pixels);
 		return _pixels.getPixels();
 	}
 	return NULL;
+}
+
+ofPixels& ofWMFoundationPlayer::getPixelsRef()
+{
+	return _pixels;
 }
 
 bool ofWMFoundationPlayer::setPixelFormat(ofPixelFormat pixelFormat)
@@ -379,8 +406,20 @@ ofPixelFormat ofWMFoundationPlayer::getPixelFormat()
 	return OF_PIXELS_RGB;
 }
 
-float ofWMFoundationPlayer::getHeight() { return _player->GetHeight(); }
-float ofWMFoundationPlayer::getWidth() { return _player->GetWidth(); }
+float ofWMFoundationPlayer::getHeight() 
+{ 
+	return _player->GetHeight(); 
+}
+
+float ofWMFoundationPlayer::getWidth() 
+{ 
+	return _player->GetWidth(); 
+}
+
+bool ofWMFoundationPlayer::isLooping() 
+{ 
+	return _isLooping; 
+}
 
 void ofWMFoundationPlayer::setLoopState(ofLoopType loopType)
 {
@@ -402,9 +441,8 @@ void ofWMFoundationPlayer::setLoopState(ofLoopType loopType)
 }
 
 //-----------------------------------
-// Prvate Functions
+// Private Functions
 //-----------------------------------
-
 
 // Handler for Media Session events.
 void ofWMFoundationPlayer::OnPlayerEvent(HWND hwnd, WPARAM pUnkPtr)
