@@ -389,7 +389,7 @@ int count = 0;
 {
     if (![self isLoaded]) return NO;
     
-    if (_bBuffering) {
+    if (_bBuffering && self.player.currentItem.loadedTimeRanges.count > 0) {
         // Check how much we've buffered out of the total.
         NSArray *loadedTimeRanges = [self.player.currentItem loadedTimeRanges];
         CMTimeRange timeRange = [[loadedTimeRanges objectAtIndex:0] CMTimeRangeValue];
