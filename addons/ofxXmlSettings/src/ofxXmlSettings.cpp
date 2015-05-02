@@ -74,9 +74,8 @@ void ofxXmlSettings::clear(){
 //---------------------------------------------------------
 bool ofxXmlSettings::loadFile(const string& xmlFile){
 
-    ofDisableDataPath();
 	string fullXmlFile = ofToDataPath(xmlFile);
-    ofEnableDataPath();
+
 	bool loadOkay = doc.LoadFile(fullXmlFile);
 
 	//theo removed bool check as it would
@@ -92,9 +91,8 @@ bool ofxXmlSettings::loadFile(const string& xmlFile){
 
 //---------------------------------------------------------
 bool ofxXmlSettings::saveFile(const string& xmlFile){
-    ofDisableDataPath();
+
 	string fullXmlFile = ofToDataPath(xmlFile);
-    ofEnableDataPath();
 	return doc.SaveFile(fullXmlFile);
 }
 
