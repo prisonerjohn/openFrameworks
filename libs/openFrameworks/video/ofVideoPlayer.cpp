@@ -119,6 +119,20 @@ ofPixelsRef ofVideoPlayer::getPixelsRef(){
 //}
 
 //---------------------------------------------------------------------------
+void ofVideoPlayer::bind(){
+	if (player != NULL){
+		player->bind();
+	}
+}
+
+//---------------------------------------------------------------------------
+void ofVideoPlayer::unbind(){
+	if (player != NULL){
+		player->unbind();
+	}
+}
+
+//---------------------------------------------------------------------------
 //for getting a reference to the texture
 ofTexture & ofVideoPlayer::getTextureReference(){
 	if(playerTex == NULL){
@@ -128,7 +142,6 @@ ofTexture & ofVideoPlayer::getTextureReference(){
 		return *playerTex;
 	}
 }
-
 
 //---------------------------------------------------------------------------
 bool ofVideoPlayer::isFrameNew(){
@@ -212,10 +225,10 @@ void ofVideoPlayer::stop(){
 //--------------------------------------------------------
 void ofVideoPlayer::setVolume(float volume){
 	if( player != NULL ){
-//		if ( volume > 1.0f ){
+		if ( volume > 1.0f ){
 //			ofLogWarning("ofVideoPlayer") << "setVolume(): expected range is 0-1, limiting requested volume " << volume << " to 1.0";
-//			volume = 1.0f;
-//		}
+			volume = 1.0f;
+		}
 		player->setVolume(volume);
 	}
 }
@@ -356,7 +369,9 @@ void ofVideoPlayer::resetAnchor(){
 
 //------------------------------------
 void ofVideoPlayer::draw(float _x, float _y, float _w, float _h){
-	getTextureReference().draw(_x, _y, _w, _h);	
+	bind();
+	getTextureReference().draw(_x, _y, _w, _h);
+	unbind();
 }
 
 //------------------------------------
@@ -386,6 +401,30 @@ float ofVideoPlayer::getHeight(){
 		height = player->getHeight();
 	}
 	return (float)height;
+}
+
+//----------------------------------------------------------
+bool ofVideoPlayer::isBuffering(){
+    if(	player != NULL ){
+        return player->isBuffering();
+    }
+    return false;
+}
+
+//----------------------------------------------------------
+float ofVideoPlayer::getBufferDuration(){
+    if(	player != NULL ){
+        return player->getBufferDuration();
+    }
+    return 1.0;
+}
+
+//----------------------------------------------------------
+float ofVideoPlayer::getBufferProgress(){
+    if(	player != NULL ){
+        return player->getBufferProgress();
+    }
+    return 1.0;
 }
 
 //----------------------------------------------------------

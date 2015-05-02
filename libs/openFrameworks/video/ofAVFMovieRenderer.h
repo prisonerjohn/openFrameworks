@@ -37,6 +37,9 @@
     double _playbackRate;
     BOOL _bLoops;
     
+    BOOL _bBuffering;
+    NSTimeInterval _bufferDuration;
+    
     BOOL _bLoading;
     BOOL _bLoaded;
     BOOL _bAudioLoaded;
@@ -53,6 +56,9 @@
 
 @property (nonatomic, assign, readonly) double width;
 @property (nonatomic, assign, readonly) double height;
+
+@property (nonatomic, assign, readonly, getter = isBuffering) BOOL bBuffering;
+@property (nonatomic, assign, readonly) NSTimeInterval bufferDuration;
 
 @property (nonatomic, assign, readonly, getter = isLoading) BOOL bLoading;
 @property (nonatomic, assign, readonly, getter = isLoaded) BOOL bLoaded;

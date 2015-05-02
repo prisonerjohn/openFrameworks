@@ -116,7 +116,7 @@ void ofAVFoundationPlayer::update()
         bHavePixelsChanged = bNewFrame;
     }
     else {
-        ofLogNotice("ofAVFoundationPlayer::update()") << "Movie player not ready";
+        ofLogVerbose("ofAVFoundationPlayer::update()") << "Movie player not ready";
     }
 }
 
@@ -247,6 +247,32 @@ bool ofAVFoundationPlayer::isLoaded()
 bool ofAVFoundationPlayer::isAudioLoaded()
 {
     return moviePlayer && [moviePlayer isAudioLoaded];
+}
+
+//--------------------------------------------------------------
+bool ofAVFoundationPlayer::isBuffering()
+{
+    return moviePlayer && [moviePlayer isBuffering];
+}
+
+//--------------------------------------------------------------
+float ofAVFoundationPlayer::getBufferDuration()
+{
+    if (moviePlayer) {
+        return [moviePlayer bufferDuration];
+    }
+    
+    return getDuration();
+}
+
+//--------------------------------------------------------------
+float ofAVFoundationPlayer::getBufferProgress()
+{
+    if (moviePlayer) {
+        return [moviePlayer bufferDuration] / [moviePlayer duration];
+    }
+    
+    return 0;
 }
 
 //--------------------------------------------------------------

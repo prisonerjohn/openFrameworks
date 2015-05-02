@@ -246,10 +246,17 @@ public:
 	
 	virtual bool 				isFrameNew() = 0;
 	virtual unsigned char * 	getPixels() = 0;
+
+	virtual void				bind(){}
+	virtual void				unbind(){}
 	virtual ofTexture *			getTexture(){return NULL;}; // if your videoplayer needs to implement seperate texture and pixel returns for performance, implement this function to return a texture instead of a pixel array. see iPhoneVideoGrabber for reference
 	
 	virtual float 				getWidth() = 0;
 	virtual float 				getHeight() = 0;
+    
+    virtual bool                isBuffering(){return false;}
+    virtual float               getBufferDuration(){return getDuration();}
+    virtual float               getBufferProgress(){return 1.0;}
 	
 	virtual bool				isPaused() = 0;
 	virtual bool				isLoaded() = 0;

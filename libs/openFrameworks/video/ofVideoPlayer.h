@@ -30,9 +30,9 @@
 	#define OF_VID_PLAYER_TYPE ofDirectShowPlayer
 #endif
 
-#ifdef OF_VIDEO_PLAYER_WMFPLAYER
-	#include "ofxWMFVideoPlayer.h"
-	#define OF_VID_PLAYER_TYPE ofxWMFVideoPlayer
+#ifdef OF_VIDEO_PLAYER_WMFOUNDATION
+	#include "ofWMFoundationPlayer.h"
+	#define OF_VID_PLAYER_TYPE ofWMFoundationPlayer
 #endif
 
 #ifdef OF_VIDEO_PLAYER_IOS
@@ -83,6 +83,8 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 		void   				setSpeed(float speed);
 		void				setFrame(int frame);  // frame 0 = first frame...
 
+		void				bind();
+		void				unbind();
 		void 				setUseTexture(bool bUse);
 		ofTexture &			getTextureReference();
 		void 				draw(float x, float y, float w, float h);
@@ -106,6 +108,10 @@ class ofVideoPlayer : public ofBaseVideoPlayer,public ofBaseVideoDraws{
 
 		float 				getHeight();
 		float 				getWidth();
+    
+        bool                isBuffering();
+        float               getBufferDuration();
+        float               getBufferProgress();
 
 		bool				isPaused();
 		bool				isLoaded();

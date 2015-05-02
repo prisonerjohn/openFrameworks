@@ -1,4 +1,4 @@
-//ofxWMFVideoPlayer addon written by Philippe Laulheret for Second Story (secondstory.com)
+//ofWMFoundationPlayer addon written by Philippe Laulheret for Second Story (secondstory.com)
 //Based upon Windows SDK samples
 //MIT Licensing
 
@@ -23,7 +23,6 @@
 #include "GL/glew.h"
 #include "GL/wglew.h"
 //#include "GLFW/glfw3.h"
-#include <mutex>
 
 //-----------------------------------------------------------------------------
 // D3DPresentEngine class
@@ -43,7 +42,6 @@ const DWORD PRESENTER_BUFFER_COUNT = 3;
 #pragma comment (lib,"Evr.lib")
 #pragma comment(lib,"D3d9.lib")
 #pragma comment(lib,"Dxva2.lib")
-
 
 class D3DPresentEngine : public SchedulerCallback
 {
@@ -116,18 +114,15 @@ protected:
 protected:
 	HANDLE gl_handleD3D;
 	HANDLE d3d_shared_handle;
-	unsigned char* m_frontBuffer;
-	unsigned char* m_backBuffer;
+	
 	GLuint gl_name;
 	HANDLE gl_handle;
 
 	DWORD _shared_handle_val;
-	IDirect3DSurface9 *d3d_surface;
-	IDirect3DTexture9 *d3d_texture;
+	IDirect3DSurface9 *d3d_shared_surface;
+	IDirect3DTexture9 *d3d_shared_texture;
 
 	int _w,_h;
-    bool    hasNVidiaExtensions;
-    std::mutex m_mutex;
 
 public:
 
@@ -138,13 +133,10 @@ public:
 		
 
 	}
-
 	bool createSharedTexture(int w, int h, int textureID);
 
 	void releaseSharedTexture();
 	bool lockSharedTexture();
-    unsigned char* getPixels();
 
 	bool unlockSharedTexture();
-    bool m_hasNewFrame;
 };
