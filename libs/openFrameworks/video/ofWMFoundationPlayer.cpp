@@ -149,10 +149,12 @@ bool ofWMFoundationPlayer::endLoad()
 		_width = _player->GetWidth();
 		_height = _player->GetHeight();
 
-		_sharedTex.allocate(_width, _height, GL_RGB, true);
-		_player->m_pEVRPresenter->createSharedTexture(_width, _height, _sharedTex.texData.textureID);
+		if (_width > 0 && _height > 0) {
+			_sharedTex.allocate(_width, _height, GL_RGB, true);
+			_player->m_pEVRPresenter->createSharedTexture(_width, _height, _sharedTex.texData.textureID);
 		
-		_sharedTextureCreated = true;
+			_sharedTextureCreated = true;
+		}
 	}
 
 	_waitingForLoad = false;
@@ -406,12 +408,16 @@ bool ofWMFoundationPlayer::setSpeed(float speed, bool useThinning)
 
 void ofWMFoundationPlayer::bind()
 { 
-	_player->m_pEVRPresenter->lockSharedTexture();
+	if (_sharedTextureCreated) {
+		_player->m_pEVRPresenter->lockSharedTexture();
+	}
 }
 
 void ofWMFoundationPlayer::unbind()
 { 
-	_player->m_pEVRPresenter->unlockSharedTexture();
+	if (_sharedTextureCreated) {
+		_player->m_pEVRPresenter->unlockSharedTexture();
+	}
 }
 
 ofTexture * ofWMFoundationPlayer::getTexture()
