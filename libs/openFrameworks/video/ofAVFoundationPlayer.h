@@ -56,6 +56,7 @@ public:
     bool                isBuffering();
     float               getBufferDuration();
     float               getBufferProgress();
+    bool                isLikelyToKeepUp();
     
     bool                isPlaying();
     bool                getIsMovieDone();

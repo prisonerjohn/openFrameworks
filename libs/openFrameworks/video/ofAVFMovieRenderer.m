@@ -437,6 +437,11 @@ int count = 0;
     return NO;
 }
 
+- (BOOL)isLikelyToKeepUp
+{
+    return self.player.currentItem && self.player.currentItem.isPlaybackLikelyToKeepUp;
+}
+
 #pragma mark - Pixels and Texture
 
 //--------------------------------------------------------------

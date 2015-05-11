@@ -57,6 +57,7 @@
 @property (nonatomic, assign, readonly) double width;
 @property (nonatomic, assign, readonly) double height;
 
+@property (nonatomic, assign, readonly, getter = isLikelyToKeepUp) BOOL bLikelyToKeepUp;
 @property (nonatomic, assign, readonly, getter = isBuffering) BOOL bBuffering;
 @property (nonatomic, assign, readonly) NSTimeInterval bufferDuration;
 

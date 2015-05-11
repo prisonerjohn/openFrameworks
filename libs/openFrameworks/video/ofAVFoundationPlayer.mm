@@ -256,6 +256,12 @@ bool ofAVFoundationPlayer::isBuffering()
 }
 
 //--------------------------------------------------------------
+bool ofAVFoundationPlayer::isLikelyToKeepUp()
+{
+    return moviePlayer && [moviePlayer isLikelyToKeepUp];
+}
+
+//--------------------------------------------------------------
 float ofAVFoundationPlayer::getBufferDuration()
 {
     if (moviePlayer) {
